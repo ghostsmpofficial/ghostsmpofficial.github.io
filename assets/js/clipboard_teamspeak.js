@@ -1,5 +1,5 @@
 function copy(){
-    navigator.clipboard.writeText('ts.onecraft.it')
+    navigator.clipboard.writeText('node.cyberdigitalshop.akashona.cloud:19138')
     swal({
     title: 'IP BERHASIL DI COPPY',
     text: 'SELAMAT BERSENANG-SENANG',
