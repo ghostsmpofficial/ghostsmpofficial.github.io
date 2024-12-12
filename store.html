@@ -56,72 +56,133 @@
 			</section>
 
 			<!-- Store Items -->
-			<section id="store-items" class="wrapper style2 special">
-				<div class="inner">
-					<header class="major">
-						<h2>Item Store</h2>
-						<p>Berbagai Item Spesial Untuk Mendukung GhostSmp</p>
-					</header>
+<section id="store-items" class="wrapper style2 special">
+    <div class="inner">
+        <header class="major">
+            <h2>Item Store</h2>
+            <p>Berbagai Item Spesial Untuk Mendukung GhostSmp</p>
+        </header>
 
-					<div class="features">
-						<section>
-							<h3>Rank VIP</h3>
-							<img src="images/store/VIP_5.webp" alt="Rank VIP" width="160" height="160"> />
-							<p>Dapatkan akses istimewa dan fitur eksklusif!</p>
-							<div class="store-price">Rp 13.000/Perbulan</div>
-							<a href="rank-vip" class="button">Beli Sekarang</a>
-						</section>
+        <!-- Category Dropdown -->
+        <div class="store-category-selector">
+            <select id="store-category-select" class="store-select">
+                <option value="">Pilih Kategori</option>
+                <option value="rank">Rank</option>
+                <option value="money">Money</option>
+                <option value="shards">Shards (XP Level)</option>
+                <option value="server-access">Server Akses</option>
+            </select>
+        </div>
 
-						<section>
-							<h3>Rank MVP</h3>
-							<img src="images/store/MVP_3.webp" alt="Rank MVP" width="160" height="160"> />
-							<p>Dapatkan akses istimewa dan fitur eksklusif!</p>
-							<div class="store-price">Rp ?????/Perbulan</div>
-							<a href="rank-mvp" class="button">Beli Sekarang</a>
-						</section>
+        <!-- Store Items Container -->
+        <div id="store-items-container">
+            <!-- Rank Category -->
+            <div class="store-category" id="rank-category" style="display:none;">
+                <h2>Rank</h2>
+                <div class="features">
+                    <section>
+                        <h3>Rank VIP</h3>
+                        <img src="images/store/VIP_5.webp" alt="Rank VIP" width="160" height="160">
+                        <p>Dapatkan akses istimewa dan fitur eksklusif!</p>
+                        <div class="store-price">Rp 13.000/Perbulan</div>
+                        <a href="rank-vip" class="button">Beli Sekarang</a>
+                    </section>
 
-						<section>
-							<h3>Money Boost</h3>
-							<img src="images/store/money-boost.jpg" alt="Money Boost" />
-							<p>Dapatkan boost uang dalam game!</p>
-							<div class="store-price">Rp 25.000</div>
-							<a href="#" class="button">Beli Sekarang</a>
-						</section>
+                    <section>
+                        <h3>Rank MVP</h3>
+                        <img src="images/store/MVP_3.webp" alt="Rank MVP" width="160" height="160">
+                        <p>Dapatkan akses istimewa dan fitur eksklusif!</p>
+                        <div class="store-price">Rp 25.000/Perbulan</div>
+                        <a href="rank-mvp" class="button">Beli Sekarang</a>
+                    </section>
 
-						<section>
-							<h3>Premium Slot</h3>
-							<img src="images/store/premium-slot.jpg" alt="Premium Slot" />
-							<p>Slot premium untuk bermain di server!</p>
-							<div class="store-price">Rp 35.000</div>
-							<a href="#" class="button">Beli Sekarang</a>
-						</section>
-					</div>
-				</div>
-			</section>
+                    <section>
+                        <h3>Rank LEGEND</h3>
+                        <img src="images/store/LEGEND_1.webp" alt="Rank LEGEND" width="160" height="160">
+                        <p>Dapatkan akses premium tertinggi!</p>
+                        <div class="store-price">Rp 50.000/Perbulan</div>
+                        <a href="rank-legend" class="button">Beli Sekarang</a>
+                    </section>
+                </div>
+            </div>
 
-			<!-- Payment Guide -->
-			<section id="payment-guide" class="wrapper style3 special">
-				<div class="inner">
-					<header class="major">
-						<h2>Cara Pembayaran</h2>
-						<p>Mudah dan Aman</p>
-					</header>
-					<ul class="features">
-						<li class="icon solid fa-money-bill-wave">
-							<h3>Transfer Bank</h3>
-							<p>Transfer ke rekening resmi GhostSmp</p>
-						</li>
-						<li class="icon brands fa-paypal">
-							<h3>Online Payment</h3>
-							<p>Bayar melalui platform pembayaran online</p>
-						</li>
-						<li class="icon solid fa-mobile-alt">
-							<h3>E-Wallet</h3>
-							<p>Gunakan berbagai e-wallet yang tersedia</p>
-						</li>
-					</ul>
-				</div>
-			</section>
+            <!-- Money Category -->
+            <div class="store-category" id="money-category" style="display:none;">
+                <h2>Money</h2>
+                <div class="features">
+                    <section>
+                        <h3>Money Boost</h3>
+                        <img src="images/store/money-boost.jpg" alt="Money Boost" width="160" height="160">
+                        <p>Dapatkan boost uang dalam game!</p>
+                        <div class="store-price">Rp 25.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+
+                    <section>
+                        <h3>Money Pack Small</h3>
+                        <img src="images/store/money-pack-small.jpg" alt="Money Pack Small" width="160" height="160">
+                        <p>Paket uang dalam game kecil</p>
+                        <div class="store-price">Rp 10.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+
+                    <section>
+                        <h3>Money Pack Large</h3>
+                        <img src="images/store/money-pack-large.jpg" alt="Money Pack Large" width="160" height="160">
+                        <p>Paket uang dalam game besar</p>
+                        <div class="store-price">Rp 50.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Shards Category -->
+            <div class="store-category" id="shards-category" style="display:none;">
+                <h2>Shards (XP Level)</h2>
+                <div class="features">
+                    <section>
+                        <h3>Shards Boost Small</h3>
+                        <img src="images/store/shards-boost-small.jpg" alt="Shards Boost Small" width="160" height="160">
+                        <p>Boost XP level kecil</p>
+                        <div class="store-price">Rp 15.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+
+                    <section>
+                        <h3>Shards Boost Medium</h3>
+                        <img src="images/store/shards-boost-medium.jpg" alt="Shards Boost Medium" width="160" height="160">
+                        <p>Boost XP level menengah</p>
+                        <div class="store-price">Rp 30.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+
+                    <section>
+                        <h3>Shards Boost Large</h3>
+                        <img src="images/store/shards-boost-large.jpg" alt="Shards Boost Large" width="160" height="160">
+                        <p>Boost XP level besar</p>
+                        <div class="store-price">Rp 50.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Server Access Category -->
+            <div class="store-category" id="server-access-category" style="display:none;">
+                <h2>Server Akses</h2>
+                <div class="features">
+                    <section>
+                        <h3>Premium Slot</h3>
+                        <img src="images/store/premium-slot.jpg" alt="Premium Slot" width="160" height="160">
+                        <p>Slot premium untuk bermain di server!</p>
+                        <div class="store-price">Rp 35.000</div>
+                        <a href="#" class="button">Beli Sekarang</a>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 			<!-- Contact -->
 			<section id="cta" class="wrapper style4">
@@ -160,5 +221,6 @@
 		<script src="assets/js/util.js"></script>
 		<script src="assets/js/main.js"></script>
 		<script src="assets/js/buttontop.js"></script>
+		<script src="assets/js/store.js"></script>
 	</body>
 </html>
