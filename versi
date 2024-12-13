@@ -1,0 +1,255 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>GhostSmp - Update Notes</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script src="https://kit.fontawesome.com/a1f6a7827b.js" crossorigin="anonymous"></script>
+		<link rel="icon" href="images/logo.png">
+		<style media="screen">
+		@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+		body{
+		 background: #f6f6f6;
+		}
+
+		.contenitore{
+		 margin: 100px auto;
+		 background: #fff;
+		 border-radius: 7px;
+		 box-shadow: 1px 2px 4px rgba(0,0,0,.3);
+		}
+
+		.contenitore .heading{
+		 background-color: #4169E1;
+		 border-radius: 7px 7px 0px 0px;
+		 padding: 10px;
+		 color: #fff;
+		 text-align: center;
+		 font-family: "Rubik";
+		}
+
+		.regole{
+		 padding: 0px 20px 20px;
+		}
+
+		::-webkit-details-marker{
+		 float: right;
+		 margin-top: 3px;
+		}
+
+		details{
+		 background: #f6f6f6;
+		 padding: 10px 20px;
+		 border-radius: 7px;
+		 margin-top: 20px;
+		 font-family: "Rubik";
+		 font-size: 14px;
+		 letter-spacing: 1px;
+		 cursor: pointer;
+		}
+
+		details summary{
+		 outline: none;
+		}
+		</style>
+	</head>
+	<body>
+		<!-- Back to top button -->
+      <a id="buttontop"></a>
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="/">GhostSmp</a></h1>
+						<nav id="nav">
+							<ul>
+								<li class="special">
+									<a href="#menu" class="menuToggle"><span>Menu</span></a>
+									<div id="menu">
+										<ul>
+											<li><a style="cursor: pointer;" onClick="window.open('/', '_self')">Home</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('store', '_blank')">Store</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('vote', '_self')" >Vote</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('peraturan', '_self')">Peraturan</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('pencalonan', '_self')">Pencalonan</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('pengumuman', '_self')">Papan Pengumuman</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('staff', '_self')">Staff</a></li>
+											<li><a style="cursor: pointer;" onClick="window.open('social', '_self')">Social</a></li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<article id="main">
+						<header>
+							<h2>Update Notes</h2>
+							<p>Informasi update terbaru dari GhostSmp</p>
+						</header>
+						<section class="wrapper style5">
+							<div class="inner">
+
+								<h5 style="margin-bottom: -60px;">Update Notes</h5>
+
+									<div class="contenitore">
+										<p class="heading">Catatan Update GhostSmp Versi 1.0</p>
+							 	   <div class="regole">
+							 	      <details>
+							 	         <summary><b>Perbaikan Lobby</b></summary>
+												 <br>
+												<table class="table table-striped">
+                            <tbody>
+                              <tr>
+                                <th scope="row">1</th>
+                                <td>Desain lobby diperbarui untuk pengalaman pengguna yang lebih baik dan intuitif
+																</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">2</th>
+                                <td>Peningkatan performa dan kecepatan loading lobby server
+																</td>
+                              </tr>
+                              <tr>
+                                <th scope="row">3</th>
+                                <td>Penambahan fitur navigasi baru yang memudahkan pemain dalam berinteraksi
+																</td>
+                              </tr>
+                            </tbody>
+                        </table>
+							 	      </details>
+							 	      <details>
+							 	         <summary><b>Perbaikan Village</b></summary>
+												 <br>
+												 <table class="table table-striped">
+                             <tbody>
+                               <tr>
+                                 <th scope="row">1</th>
+                                 <td>Perbaikan bug pada interaksi NPC di area village
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">2</th>
+                                 <td>Peningkatan stabilitas dan performa wilayah village
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">3</th>
+                                 <td>Perbaikan mekanisme transaksi dan interaksi di seluruh area village
+																 </td>
+                               </tr>
+                             </tbody>
+                         </table>
+							 	      </details>
+							 	      <details>
+							 	         <summary><b>Perbaikan NPC</b></summary>
+												 <br>
+												 <table class="table table-striped">
+                             <tbody>
+                               <tr>
+                                 <th scope="row">1</th>
+                                 <td>Perbaikan bug pada dialog dan interaksi NPC
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">2</th>
+                                 <td>Penambahan respon dialog yang lebih natural dan mendalam
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">3</th>
+                                 <td>Optimasi performa NPC dalam berbagai situasi gameplay
+																 </td>
+                               </tr>
+                             </tbody>
+                         </table>
+							 	      </details>
+							 	      <details>
+							 	         <summary><b>Penambahan Rank</b></summary>
+												 <br>
+												 <table class="table table-striped">
+                             <tbody>
+                               <tr>
+                                 <th scope="row">1</th>
+                                 <td>Diperkenalkan rank VIP baru dengan keistimewaan khusus
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">2</th>
+                                 <td>Rank MVP ditambahkan dengan berbagai keuntungan premium
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">3</th>
+                                 <td>Sistem progression rank yang lebih adil dan menarik
+																 </td>
+                               </tr>
+                             </tbody>
+                         </table>
+							 	      </details>
+							 	      <details>
+							 	         <summary><b>Perbaikan Skill dan Senjata</b></summary>
+												 <br>
+												 <table class="table table-striped">
+                             <tbody>
+                               <tr>
+                                 <th scope="row">1</th>
+                                 <td>Penyeimbangan skill pada senjata Legends
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">2</th>
+                                 <td>Perbaikan mekanika dan balancing skill tempur
+																 </td>
+                               </tr>
+                               <tr>
+                                 <th scope="row">3</th>
+                                 <td>Update texture senjata untuk tampilan yang lebih menarik
+																 </td>
+                               </tr>
+                             </tbody>
+                         </table>
+							 	      </details>
+							 	   </div>
+									</div>
+
+							</div>
+						</section>
+					</article>
+
+				<!-- Footer -->
+				<footer id="footer">
+					<ul class="icons">
+						<li><a href="https://t.me/ServerNameChat" target="_blank" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
+						<li><a href="https://discord.gg/p6At8NZ2" target="_blank" class="icon brands fa-discord"><span class="label">Discord</span></a></li>
+						<li><a href="http://tiktok.ServerName.net" target="_blank" class="icon brands fa-tiktok"><span class="label">TikTok</span></a></li>
+						<li><a href="https://www.instagram.com/ServerName_official/" target="_blank" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+						<li><a href="http://youtube.ServerName.net" target="_blank" class="icon brands fa-youtube"><span class="label">YouTube</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>&copy; GhostSmp 2024 | Semua hak dilindungi undang-undang</li>
+					</ul>
+				</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script src="assets/js/buttontop.js"></script>
+
+	</body>
+</html>
