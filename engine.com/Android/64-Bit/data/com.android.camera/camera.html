@@ -31,7 +31,7 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 video {
@@ -40,14 +40,17 @@ video {
     border-radius: 20px;
 }
 
-.top-bar,
-.bottom-bar,
-.flash-bar {
+.top-bar {
     display: flex;
     justify-content: space-between;
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.9); /* Transparan gelap */
     color: #00bfff; /* Biru cerah */
+}
+
+.camera-title {
+    flex-grow: 1; /* Membuat judul di tengah */
+    text-align: center;
 }
 
 .round-button {
@@ -65,11 +68,37 @@ video {
     background-color: #0056b3; /* Gelap saat hover */
 }
 
+.photo-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.big-photo-button {
+    background-color: white; /* Tombol foto besar berwarna putih */
+    color: #333; /* Teks gelap */
+    font-size: 24px;
+    width: 120px;
+    height: 120px;
+    border: none;
+    border-radius: 60px; /* Membuatnya bulat */
+    line-height: 120px;  /* Centering the text vertically */
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
 .zoom-options {
     display: flex;
     justify-content: center;
     gap: 15px;
-    margin: 15px 0; /* Ruang tambahan */
+    margin: 10px 0; /* Ruang tambahan */
+}
+
+.bottom-bar {
+    display: flex;
+    justify-content: space-around; /* Rata tengah */
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
 .popup {
@@ -117,6 +146,12 @@ video {
         <div class="top-bar">
             <button id="settingsButton" class="round-button">Pengaturan</button>
             <button id="flashButton" class="round-button">Flash</button>
+            <h1 class="camera-title">Kamera</h1>
+        </div>
+
+        <!-- Tombol Foto Besar -->
+        <div class="photo-button-container">
+            <button id="takePhotoButton" class="big-photo-button">Foto</button>
         </div>
 
         <!-- Opsi Zoom -->
@@ -139,14 +174,14 @@ video {
                 <h2>Pengaturan</h2>
                 <button id="hdrButton" class="round-button">HDR</button>
                 <button id="timerButton" class="round-button">Timer</button>
+                <!-- Flash Control Buttons -->
+                <div class="flash-popup">
+                    <h3>Pengaturan Flash</h3>
+                    <button id="flashOffButton" class="round-button">Flash Off</button>
+                    <button id="flashOnButton" class="round-button">Flash On</button>
+                    <button id="flashAlwaysButton" class="round-button">Flash Always</button>
+                </div>
             </div>
-        </div>
-
-        <!-- Flash Control -->
-        <div class="flash-bar">
-            <button id="flashOffButton" class="round-button">Flash Off</button>
-            <button id="flashOnButton" class="round-button">Flash On</button>
-            <button id="flashAlwaysButton" class="round-button">Flash Always</button>
         </div>
 
         <!-- Dynamic Island -->
@@ -166,6 +201,7 @@ const photoButton = document.getElementById('photoButton');
 const videoButton = document.getElementById('videoButton');
 const macroButton = document.getElementById('macroButton');
 const settingsPopup = document.getElementById('settingsPopup');
+const takePhotoButton = document.getElementById('takePhotoButton');
 
 // Mulai kamera
 function startCamera() {
@@ -186,21 +222,36 @@ function startCamera() {
         });
 }
 
+// Ambil foto
+function takePhoto() {
+    const canvas = document.createElement('canvas');
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+
+    const context = canvas.getContext('2d');
+    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    
+    canvas.toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'photo.png';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }, 'image/png');
+}
+
 // Toggle popup
 function togglePopup(popup) {
     popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
 // Flash Control
-flashButton.addEventListener('click', () => {
-    if (flashOffButton.style.display === '') {
-        flashOffButton.style.display = 'none';
-        flashOnButton.style.display = 'inline-block';
-    } else {
-        flashOffButton.style.display = 'inline-block';
-        flashOnButton.style.display = 'none';
-    }
-});
+flashButton.addEventListener('click', () => togglePopup(settingsPopup));
+
+// Tombol untuk mengambil foto
+takePhotoButton.addEventListener('click', takePhoto);
 
 // Popup Settings
 settingsButton.addEventListener('click', () => togglePopup(settingsPopup));
