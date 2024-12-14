@@ -45,7 +45,8 @@ video {
     color: #00bfff; /* Biru cerah */
     position: absolute;
     top: 10px; /* Menempatkan bar di atas kamera */
-    width: calc(100% - 32px); /* Menghindari overflow */
+    left: 0;
+    right: 0; /* Membuat lebar penuh */
     z-index: 10; /* Pastikan di atas video */
 }
 
@@ -112,6 +113,15 @@ video {
     background-color: #0056b3; /* Gelap saat hover */
 }
 
+.mp-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00bfff; /* Biru cerah */
+    color: white;
+    cursor: pointer;
+}
+
 .popup {
     display: none;
     position: fixed;
@@ -131,6 +141,7 @@ video {
     text-align: center;
     width: 80%;
     max-width: 400px;
+    position: relative; /* Mengatur posisi relatif untuk close button */
 }
 
 .close-button {
@@ -176,7 +187,7 @@ video {
             <button id="takePhotoButton" class="big-photo-button">Foto</button>
         </div>
 
-        <!-- Opsi Zoom -->
+        <!-- Opsi Zoom Pindah ke sini -->
         <div class="zoom-options">
             <button id="zoom0.5x" class="round-button" data-zoom="0.5">0.5x</button>
             <button id="zoom1x" class="round-button" data-zoom="1">1x</button>
@@ -188,6 +199,12 @@ video {
             <button id="photoButton" class="option-button">Foto</button>
             <button id="videoButton" class="option-button">Video</button>
             <button id="macroButton" class="option-button">Makro</button>
+            <div id="resolutionContainer" class="option-container" style="display: none;">
+                <button id="res4k" class="round-button" style="display: none;">4K 120fps</button>
+                <button id="res8k" class="round-button" style="display: none;">8K 120fps</button>
+                <button id="ultraStabilButton" class="round-button">Ultra Stabil</button>
+            </div>
+            <button id="mp200Button" class="mp-button" style="display: none;">200MP</button>
         </div>
 
         <!-- Popup Settings -->
@@ -230,6 +247,15 @@ const takePhotoButton = document.getElementById('takePhotoButton');
 const zoomButtons = document.querySelectorAll('.zoom-options .round-button');
 const optionButtons = document.querySelectorAll('.bottom-bar .option-button');
 const closeButtons = document.querySelectorAll('.close-button');
+const mp200Button = document.getElementById('mp200Button');
+const resolutionContainer = document.getElementById('resolutionContainer');
+const res4kButton = document.getElementById('res4k');
+const res8kButton = document.getElementById('res8k');
+const ultraStabilButton = document.getElementById('ultraStabilButton');
+
+// Status
+let mode = 'photo';
+let currentZoom = 0; // Default zoom
 
 // Mulai kamera
 function startCamera() {
@@ -238,7 +264,7 @@ function startCamera() {
             width: { ideal: 1920 },
             height: { ideal: 1080 },
             facingMode: 'environment',
-            zoom: 0 // Default zoom
+            zoom: currentZoom // Mengatur zoom
         }
     };
 
@@ -276,26 +302,12 @@ function togglePopup(popup) {
     popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-// Flash Control
-flashButton.addEventListener('click', () => togglePopup(flashPopup));
-settingsButton.addEventListener('click', () => togglePopup(settingsPopup));
-
-// Pilih Zoom
+// Pilih zoom
 zoomButtons.forEach(button => {
     button.addEventListener('click', () => {
         const zoomValue = button.dataset.zoom;
-        const constraints = {
-            video: {
-                zoom: zoomValue // Mengatur zoom
-            }
-        };
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(stream => {
-                videoElement.srcObject = stream;
-            })
-            .catch(error => {
-                console.error('Gagal mengakses kamera:', error);
-            });
+        currentZoom = zoomValue; // Mengubah nilai zoom
+        startCamera(); // Memulai kembali kamera dengan zoom baru
     });
 });
 
@@ -303,13 +315,52 @@ zoomButtons.forEach(button => {
 optionButtons.forEach(button => {
     button.addEventListener('click', () => {
         const type = button.id; // 'photo', 'video', or 'macro'
-        // Logika untuk seleksi mode, jika diperlukan
-        console.log(`Mode kamera: ${type}`);
+
+        if (type === 'photo') {
+            mode = 'photo';
+            mp200Button.style.display = 'block'; // Menampilkan tombol 200MP
+            mp200Button.innerHTML = '200MP';
+            mp200Button.classList.remove('selected'); // Menghapus status terpilih
+            resolutionContainer.style.display = 'none'; // Menghilangkan resolusi
+        } else if (type === 'video') {
+            mode = 'video';
+            takePhotoButton.innerHTML = 'Video';
+            mp200Button.innerHTML = 'Resolution';
+            mp200Button.classList.remove('selected'); // Menghapus status terpilih
+            resolutionContainer.style.display = 'block'; // Menampilkan opsi resolusi
+            res4kButton.style.display = 'inline-block'; // Menampilkan opsi 4K
+            res8kButton.style.display = 'inline-block'; // Menampilkan opsi 8K
+        } else if (type === 'macro') {
+            mode = 'macro';
+            takePhotoButton.innerHTML = 'Foto';
+            mp200Button.style.display = 'none'; // Menyembunyikan tombol 200MP
+            resolutionContainer.style.display = 'none'; // Menghilangkan resolusi
+        }
     });
 });
 
+// Tombol untuk resolusi video
+res4kButton.addEventListener('click', () => {
+    console.log('Resolusi diatur ke 4K 120fps');
+});
+
+res8kButton.addEventListener('click', () => {
+    console.log('Resolusi diatur ke 8K 120fps');
+});
+
+// Tombol untuk ultra stabil
+ultraStabilButton.addEventListener('click', () => {
+    console.log('Ultra Stabil diaktifkan');
+});
+
 // Tombol untuk mengambil foto
-takePhotoButton.addEventListener('click', takePhoto);
+takePhotoButton.addEventListener('click', () => {
+    if (mode === 'photo') {
+        takePhoto();
+    } else if (mode === 'video') {
+        console.log('Mulai merekam video');
+    }
+});
 
 // Menutup pop-up
 closeButtons.forEach(button => {
@@ -317,6 +368,16 @@ closeButtons.forEach(button => {
         const popup = event.target.closest('.popup');
         popup.style.display = 'none';
     });
+});
+
+// Menampilkan tombol 200MP dan fungsinya
+mp200Button.addEventListener('click', () => {
+    if (mode === 'photo') {
+        mp200Button.classList.toggle('selected');
+        console.log('Mengaktifkan 200MP: Foto lebih HD dan jernih');
+    } else if (mode === 'video') {
+        resolutionContainer.style.display = resolutionContainer.style.display === 'none' ? 'block' : 'none';
+    } 
 });
 
 // Inisialisasi Kamera
