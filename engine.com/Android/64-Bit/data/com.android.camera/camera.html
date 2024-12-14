@@ -29,9 +29,6 @@ body {
     background-color: #000; /* Hitam */
     text-align: center;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
 }
 
 video {
@@ -46,11 +43,10 @@ video {
     padding: 15px;
     background-color: rgba(0, 0, 0, 0.9); /* Transparan gelap */
     color: #00bfff; /* Biru cerah */
-}
-
-.camera-title {
-    flex-grow: 1; /* Membuat judul di tengah */
-    text-align: center;
+    position: absolute;
+    top: 10px; /* Menempatkan bar di atas kamera */
+    width: calc(100% - 32px); /* Menghindari overflow */
+    z-index: 10; /* Pastikan di atas video */
 }
 
 .round-button {
@@ -99,6 +95,21 @@ video {
     justify-content: space-around; /* Rata tengah */
     padding: 10px;
     background-color: rgba(0, 0, 0, 0.9);
+    position: relative; /* Penempatan relatif */
+}
+
+.option-button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Biru */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.option-button:hover {
+    background-color: #0056b3; /* Gelap saat hover */
 }
 
 .popup {
@@ -122,6 +133,18 @@ video {
     max-width: 400px;
 }
 
+.close-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
 .dynamic-island {
     position: absolute;
     bottom: 20px;
@@ -142,11 +165,10 @@ video {
     <div class="camera-container">
         <video id="camera" autoplay></video>
 
-        <!-- Bar Atas -->
+        <!-- Bar Atas di luar kamera -->
         <div class="top-bar">
             <button id="settingsButton" class="round-button">Pengaturan</button>
             <button id="flashButton" class="round-button">Flash</button>
-            <h1 class="camera-title">Kamera</h1>
         </div>
 
         <!-- Tombol Foto Besar -->
@@ -156,31 +178,36 @@ video {
 
         <!-- Opsi Zoom -->
         <div class="zoom-options">
-            <button id="zoom0.5x" class="round-button">0.5x</button>
-            <button id="zoom1x" class="round-button">1x</button>
-            <button id="zoom20x" class="round-button">20x</button>
+            <button id="zoom0.5x" class="round-button" data-zoom="0.5">0.5x</button>
+            <button id="zoom1x" class="round-button" data-zoom="1">1x</button>
+            <button id="zoom20x" class="round-button" data-zoom="20">20x</button>
         </div>
 
         <!-- Bar Pengaturan Foto & Video -->
         <div class="bottom-bar">
-            <button id="photoButton" class="round-button">Foto</button>
-            <button id="videoButton" class="round-button">Video</button>
-            <button id="macroButton" class="round-button">Makro</button>
+            <button id="photoButton" class="option-button">Foto</button>
+            <button id="videoButton" class="option-button">Video</button>
+            <button id="macroButton" class="option-button">Makro</button>
         </div>
 
         <!-- Popup Settings -->
         <div id="settingsPopup" class="popup">
             <div class="popup-content">
                 <h2>Pengaturan</h2>
+                <button class="close-button">X</button>
                 <button id="hdrButton" class="round-button">HDR</button>
                 <button id="timerButton" class="round-button">Timer</button>
-                <!-- Flash Control Buttons -->
-                <div class="flash-popup">
-                    <h3>Pengaturan Flash</h3>
-                    <button id="flashOffButton" class="round-button">Flash Off</button>
-                    <button id="flashOnButton" class="round-button">Flash On</button>
-                    <button id="flashAlwaysButton" class="round-button">Flash Always</button>
-                </div>
+            </div>
+        </div>
+
+        <!-- Popup Flash -->
+        <div id="flashPopup" class="popup">
+            <div class="popup-content">
+                <h2>Pengaturan Flash</h2>
+                <button class="close-button">X</button>
+                <button id="flashOffButton" class="round-button">Flash Off</button>
+                <button id="flashOnButton" class="round-button">Flash On</button>
+                <button id="flashAlwaysButton" class="round-button">Flash Always</button>
             </div>
         </div>
 
@@ -197,11 +224,12 @@ const flashButton = document.getElementById('flashButton');
 const flashOffButton = document.getElementById('flashOffButton');
 const flashOnButton = document.getElementById('flashOnButton');
 const flashAlwaysButton = document.getElementById('flashAlwaysButton');
-const photoButton = document.getElementById('photoButton');
-const videoButton = document.getElementById('videoButton');
-const macroButton = document.getElementById('macroButton');
 const settingsPopup = document.getElementById('settingsPopup');
+const flashPopup = document.getElementById('flashPopup');
 const takePhotoButton = document.getElementById('takePhotoButton');
+const zoomButtons = document.querySelectorAll('.zoom-options .round-button');
+const optionButtons = document.querySelectorAll('.bottom-bar .option-button');
+const closeButtons = document.querySelectorAll('.close-button');
 
 // Mulai kamera
 function startCamera() {
@@ -209,7 +237,8 @@ function startCamera() {
         video: {
             width: { ideal: 1920 },
             height: { ideal: 1080 },
-            facingMode: 'environment'
+            facingMode: 'environment',
+            zoom: 0 // Default zoom
         }
     };
 
@@ -248,13 +277,47 @@ function togglePopup(popup) {
 }
 
 // Flash Control
-flashButton.addEventListener('click', () => togglePopup(settingsPopup));
+flashButton.addEventListener('click', () => togglePopup(flashPopup));
+settingsButton.addEventListener('click', () => togglePopup(settingsPopup));
+
+// Pilih Zoom
+zoomButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const zoomValue = button.dataset.zoom;
+        const constraints = {
+            video: {
+                zoom: zoomValue // Mengatur zoom
+            }
+        };
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                videoElement.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('Gagal mengakses kamera:', error);
+            });
+    });
+});
+
+// Opsi Foto, Video, dan Makro
+optionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        const type = button.id; // 'photo', 'video', or 'macro'
+        // Logika untuk seleksi mode, jika diperlukan
+        console.log(`Mode kamera: ${type}`);
+    });
+});
 
 // Tombol untuk mengambil foto
 takePhotoButton.addEventListener('click', takePhoto);
 
-// Popup Settings
-settingsButton.addEventListener('click', () => togglePopup(settingsPopup));
+// Menutup pop-up
+closeButtons.forEach(button => {
+    button.addEventListener('click', (event) => {
+        const popup = event.target.closest('.popup');
+        popup.style.display = 'none';
+    });
+});
 
 // Inisialisasi Kamera
 startCamera();
