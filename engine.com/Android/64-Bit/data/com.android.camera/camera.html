@@ -3,164 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kamera Modern</title>
+    <title>Aplikasi Kamera dengan Resolusi yang Dapat Diatur</title>
     <style>
         body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
-}
-
-.container {
-    text-align: center;
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-.video-container {
-    position: relative;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-video, canvas {
-    border-radius: 20px;
-    max-width: 100%;
-}
-
-.overlay {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    right: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 10px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #3498db;
-    border-radius: 50%;
-}
-
-.controls {
-    margin-top: 10px;
-}
-
-.pro-settings {
-    margin-top: 20px;
-    background: rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    border-radius: 10px;
-}
-
-.pro-option {
-    margin: 5px 0;
-}
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            border: 2px solid #333;
+        }
+        select {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <h1>Aplikasi Kamera</h1>
-        <div class="camera-container">
-            <video id="video" autoplay></video>
-            <div class="overlay">
-                <input type="range" id="zoom" min="1" max="20" value="1" step="1" />
-            </div>
-        </div>
-        
-        <div class="controls">
+        <h1>Aplikasi Kamera dengan Resolusi yang Dapat Diatur</h1>
+        <video id="camera" autoplay></video>
+        <div>
+            <label for="resolution">Pilih Resolusi:</label>
             <select id="resolution">
                 <option value="640x480">640x480</option>
                 <option value="1280x720">1280x720</option>
                 <option value="1920x1080">1920x1080</option>
-                <option value="7680x4320">8K 60fps</option>
-                <option value="7680x4320 macro">8K 30fps (Macro)</option>
             </select>
-            <button id="capture">Ambil Foto</button>
-            <button id="start-video">Rekam Video</button>
         </div>
-
-        <div class="pro-settings">
-            <h2>Pengaturan Pro:</h2>
-            <div class="pro-option">EV: <input type="number" value="0" /></div>
-            <div class="pro-option">S: <input type="number" value="100" /></div>
-            <div class="pro-option">ISO: <input type="number" value="100" /></div>
-            <div class="pro-option">WB: <input type="number" value="5600" /></div>
-            <div class="pro-option">AF: <select>
-                <option value="auto">Auto</option>
-                <option value="manual">Manual</option>
-            </select></div>
-            <div class="pro-option">ME: <input type="number" value="0" /></div>
-        </div>
-        
-        <canvas id="canvas"></canvas>
+        <button id="startCamera">Mulai Kamera</button>
     </div>
+
     <script>
-        const video = document.getElementById("video");
-const canvas = document.getElementById("canvas");
-const resolutionSelect = document.getElementById("resolution");
-const captureButton = document.getElementById("capture");
-const zoomSlider = document.getElementById("zoom");
-let currentStream = null;
+        // Mengambil elemen-elemen dari HTML
+const videoElement = document.getElementById('camera');
+const startButton = document.getElementById('startCamera');
+const resolutionSelect = document.getElementById('resolution');
 
-async function startCamera() {
+// Fungsi untuk memulai kamera dengan resolusi yang dipilih
+function startCamera() {
     const resolution = resolutionSelect.value.split('x');
-    let constraints;
+    const width = parseInt(resolution[0]);
+    const height = parseInt(resolution[1]);
 
-    if (resolution[0] === "7680" && resolution[1] === "4320") {
-        constraints = { video: { width: 7680, height: 4320, frameRate: 60 } }; // 8K 60fps
-    } else if (resolution[1] === "30fps") {
-        constraints = { video: { width: 7680, height: 4320, frameRate: 30 } }; // 8K 30fps (Macro)
-    } else {
-        constraints = {
-            video: {
-                width: { ideal: parseInt(resolution[0]) },
-                height: { ideal: parseInt(resolution[1]) }
-            }
-        };
-    }
-
-    try {
-        currentStream = await navigator.mediaDevices.getUserMedia(constraints);
-        video.srcObject = currentStream;
-    } catch (error) {
-        console.error("Error accessing the camera: ", error);
-    }
+    // Mengakses kamera dan mengatur resolusi
+    navigator.mediaDevices.getUserMedia({
+        video: {
+            width: { ideal: width },
+            height: { ideal: height }
+        }
+    })
+    .then(stream => {
+        videoElement.srcObject = stream;
+        startButton.disabled = true; // Nonaktifkan tombol setelah kamera dimulai
+    })
+    .catch(error => {
+        console.error('Gagal mengakses kamera:', error);
+    });
 }
 
-function applyZoom() {
-    const zoomLevel = zoomSlider.value;
-    video.style.transform = `scale(${zoomLevel})`;
-}
+// Menambahkan event listener untuk tombol mulai kamera
+startButton.addEventListener('click', startCamera);
 
-function capturePhoto() {
-    const ctx = canvas.getContext("2d");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-}
-
-resolutionSelect.addEventListener('change', startCamera);
-zoomSlider.addEventListener('input', applyZoom);
-window.addEventListener('load', startCamera);
-captureButton.addEventListener('click', capturePhoto);
     </script>
 </body>
 </html>
