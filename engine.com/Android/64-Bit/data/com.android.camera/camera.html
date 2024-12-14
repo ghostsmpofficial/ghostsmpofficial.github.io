@@ -3,65 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kamera dengan Resolusi yang Dapat Diatur</title>
+    <title>Aplikasi Kamera Pro</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        .container {
-            text-align: center;
-        }
-        video {
-            width: 100%;
-            max-width: 600px;
-            border: 2px solid #333;
-        }
-        select {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            margin-top: 20px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.camera-container {
+    position: relative;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 50px;
+    border: 5px solid #333;
+    overflow: hidden;
+    background-color: black;
+    text-align: center;
+}
+
+video {
+    width: 100%;
+    height: auto;
+    border-radius: 50px;
+}
+
+.controls {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
+.controls button,
+.controls select {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.controls button:hover,
+.controls select:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.camera-modes {
+    position: absolute;
+    bottom: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.camera-modes button {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.camera-modes button:hover {
+    background-color: #45a049;
+}
+
+.pro-settings {
+    position: absolute;
+    bottom: 50px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.pro-settings .setting {
+    margin-bottom: 10px;
+}
+
+.pro-settings label {
+    display: inline-block;
+    width: 150px;
+}
+
+.pro-settings input[type="range"] {
+    width: 80%;
+}
+
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Aplikasi Kamera dengan Resolusi yang Dapat Diatur</h1>
+    <div class="camera-container">
         <video id="camera" autoplay></video>
-        <div>
-            <label for="resolution">Pilih Resolusi:</label>
+        <div class="controls">
+            <button id="zoomIn">Zoom +</button>
+            <button id="zoomOut">Zoom -</button>
+            <label for="resolution">Resolusi:</label>
             <select id="resolution">
                 <option value="640x480">640x480</option>
                 <option value="1280x720">1280x720</option>
                 <option value="1920x1080">1920x1080</option>
+                <option value="3840x2160">4K</option>
+                <option value="7680x4320">8K</option>
             </select>
         </div>
-        <button id="startCamera">Mulai Kamera</button>
+        <div class="camera-modes">
+            <button id="macroMode">Macro Mode</button>
+            <button id="proMode">Pro Mode</button>
+        </div>
+
+        <div class="pro-settings" id="proSettings" style="display:none;">
+            <div class="setting">
+                <label for="ev">EV:</label>
+                <input type="range" id="ev" min="-3" max="3" step="0.1">
+            </div>
+            <div class="setting">
+                <label for="shutterSpeed">Shutter Speed:</label>
+                <input type="range" id="shutterSpeed" min="1" max="1000">
+            </div>
+            <div class="setting">
+                <label for="iso">ISO:</label>
+                <input type="range" id="iso" min="100" max="6400">
+            </div>
+            <div class="setting">
+                <label for="wb">White Balance:</label>
+                <input type="range" id="wb" min="2000" max="10000">
+            </div>
+            <div class="setting">
+                <label for="af">Auto Focus:</label>
+                <input type="checkbox" id="af">
+            </div>
+            <div class="setting">
+                <label for="manualExp">Manual Exposure:</label>
+                <input type="checkbox" id="manualExp">
+            </div>
+        </div>
     </div>
 
     <script>
-        // Mengambil elemen-elemen dari HTML
+        // Mengambil elemen dari HTML
 const videoElement = document.getElementById('camera');
-const startButton = document.getElementById('startCamera');
 const resolutionSelect = document.getElementById('resolution');
+const zoomInButton = document.getElementById('zoomIn');
+const zoomOutButton = document.getElementById('zoomOut');
+const macroModeButton = document.getElementById('macroMode');
+const proModeButton = document.getElementById('proMode');
+const proSettings = document.getElementById('proSettings');
+const evInput = document.getElementById('ev');
+const shutterSpeedInput = document.getElementById('shutterSpeed');
+const isoInput = document.getElementById('iso');
+const wbInput = document.getElementById('wb');
+const afInput = document.getElementById('af');
+const manualExpInput = document.getElementById('manualExp');
+
+let currentZoom = 1;
 
 // Fungsi untuk memulai kamera dengan resolusi yang dipilih
 function startCamera() {
@@ -69,7 +182,6 @@ function startCamera() {
     const width = parseInt(resolution[0]);
     const height = parseInt(resolution[1]);
 
-    // Mengakses kamera dan mengatur resolusi
     navigator.mediaDevices.getUserMedia({
         video: {
             width: { ideal: width },
@@ -78,15 +190,54 @@ function startCamera() {
     })
     .then(stream => {
         videoElement.srcObject = stream;
-        startButton.disabled = true; // Nonaktifkan tombol setelah kamera dimulai
     })
     .catch(error => {
         console.error('Gagal mengakses kamera:', error);
     });
 }
 
-// Menambahkan event listener untuk tombol mulai kamera
-startButton.addEventListener('click', startCamera);
+// Fungsi untuk zoom kamera
+function zoomCamera(factor) {
+    const stream = videoElement.srcObject;
+    if (!stream) return;
+
+    const track = stream.getVideoTracks()[0];
+    const capabilities = track.getCapabilities();
+    const constraints = track.getConstraints();
+
+    if (capabilities.zoom) {
+        constraints.zoom = Math.min(Math.max(constraints.zoom + factor, capabilities.zoom.min), capabilities.zoom.max);
+        track.applyConstraints(constraints);
+    }
+}
+
+// Event listener untuk tombol zoom
+zoomInButton.addEventListener('click', () => zoomCamera(0.1));
+zoomOutButton.addEventListener('click', () => zoomCamera(-0.1));
+
+// Event listener untuk pemilihan resolusi
+resolutionSelect.addEventListener('change', startCamera);
+
+// Event listener untuk mode kamera macro dan pro
+macroModeButton.addEventListener('click', () => {
+    resolutionSelect.value = '7680x4320'; // Set resolusi 8K untuk mode macro
+    startCamera();
+});
+
+proModeButton.addEventListener('click', () => {
+    proSettings.style.display = 'block'; // Menampilkan pengaturan pro
+});
+
+// Event listener untuk pengaturan pro
+evInput.addEventListener('input', () => console.log(`EV: ${evInput.value}`));
+shutterSpeedInput.addEventListener('input', () => console.log(`Shutter Speed: ${shutterSpeedInput.value}`));
+isoInput.addEventListener('input', () => console.log(`ISO: ${isoInput.value}`));
+wbInput.addEventListener('input', () => console.log(`White Balance: ${wbInput.value}`));
+afInput.addEventListener('change', () => console.log(`Auto Focus: ${afInput.checked}`));
+manualExpInput.addEventListener('change', () => console.log(`Manual Exposure: ${manualExpInput.checked}`));
+
+// Mulai kamera secara default dengan resolusi 1080p
+startCamera();
 
     </script>
 </body>
