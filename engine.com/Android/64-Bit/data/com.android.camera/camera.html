@@ -219,7 +219,7 @@
         <div class="zoom-controls">
             <button id="zoom0.5x" class="zoom-button" data-zoom="0.5">0.5x</button>
             <button id="zoom1x" class="zoom-button" data-zoom="1">1x</button>
-            <button id="zoom20x" class="zoom-button" data-zoom="20">20x</button>
+            <button id="zoom2x" class="zoom-button" data-zoom="2">2x</button>
         </div>
 
         <div class="bottom-bar">
@@ -268,6 +268,7 @@
         const flashPopup = document.getElementById('flashPopup');
         const takePhotoButton = document.getElementById('takePhotoButton');
         const modeButtons = document.querySelectorAll('.mode-button');
+        const zoomButtons = document.querySelectorAll('.zoom-button');
         const resolutionContainer = document.getElementById('resolutionContainer');
         const mp200Button = document.getElementById('mp200Button');
         const dynamicIsland = document.getElementById('dynamicIsland');
@@ -278,6 +279,7 @@
         let recording = false;
         let videoStartTime;
         let videoInterval;
+        let currentZoom = 1;
 
         function startCamera() {
             const constraints = {
@@ -299,7 +301,7 @@
 
         // Mengambil foto
         function takePhoto() {
-            // Implementasi pengambilan foto (akan ditambahkan)
+            // Simulasi pemotretan (akan ditambahkan implementasinya)
             alert('Mengambil foto (fungsi belum diimplementasikan)');
         }
 
@@ -338,26 +340,32 @@
                     takePhotoButton.innerText = 'Foto';
                     mp200Button.classList.remove('hidden');
                     resolutionContainer.style.display = 'none';
-                    flashButton.classList.remove('hidden');
+                    takePhotoButton.onclick = takePhoto;
                     videoElement.style.filter = 'none';
                 } else if (currentMode === 'video') {
                     takePhotoButton.innerText = 'Rekam';
                     mp200Button.classList.add('hidden');
                     resolutionContainer.style.display = 'flex';
-                    flashButton.classList.add('hidden');
-
                     takePhotoButton.onclick = startRecording;
                 } else if (currentMode === 'macro') {
                     takePhotoButton.innerText = 'Foto';
                     mp200Button.classList.add('hidden');
                     resolutionContainer.style.display = 'none';
-                    flashButton.classList.add('hidden');
                     videoElement.style.filter = 'blur(5px)';
                 }
 
                 if (currentMode !== 'macro') {
                     videoElement.style.filter = 'none';
                 }
+            });
+        });
+
+        // Zoom in/out
+        zoomButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const zoomLevel = parseFloat(event.target.dataset.zoom);
+                currentZoom = zoomLevel;
+                videoElement.style.transform = `scale(${currentZoom})`;
             });
         });
 
