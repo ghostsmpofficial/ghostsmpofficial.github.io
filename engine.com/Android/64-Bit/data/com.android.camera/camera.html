@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kamera Pro</title>
+    <title>Web Camera App</title>
     <style>
-        * {
+        /* Styling untuk elemen-elemen utama */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -57,48 +58,6 @@ button:hover {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-.zoom-options {
-    position: absolute;
-    bottom: 160px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.zoom-options button {
-    margin: 0 10px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.photo-video-options {
-    position: absolute;
-    bottom: 220px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.photo-video-options button {
-    margin: 0 10px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-.camera-modes {
-    position: absolute;
-    bottom: 120px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
 .popup {
     display: none;
     position: fixed;
@@ -131,36 +90,83 @@ button:hover {
     background-color: #45a049;
 }
 
-.pro-settings {
+.control-bar {
     position: absolute;
-    bottom: 150px;
+    bottom: 160px;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.control-bar button {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.flash-bar {
+    position: absolute;
+    bottom: 120px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.flash-bar button {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.dynamic-island {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
     color: white;
 }
 
-.pro-settings .setting {
-    margin-bottom: 10px;
+.zoom-options {
+    position: absolute;
+    bottom: 160px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-.pro-settings label {
-    display: inline-block;
-    width: 150px;
+.zoom-options button {
+    margin: 0 10px;
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-.pro-settings input[type="range"] {
-    width: 80%;
+.photo-options,
+.video-options {
+    position: absolute;
+    bottom: 220px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
     </style>
 </head>
 <body>
 
+    <!-- Container kamera -->
     <div class="camera-container">
         <video id="camera" autoplay></video>
 
-        <!-- Bar di atas -->
+        <!-- Bar Atas -->
         <div class="top-bar">
             <button id="settingsButton">Settings</button>
             <button id="flashButton">Flash</button>
@@ -174,22 +180,17 @@ button:hover {
             <button id="zoom20x">20x</button>
         </div>
 
-        <!-- Opsi Mode Kamera -->
-        <div class="camera-modes">
-            <button id="macroMode">Macro Mode</button>
-            <button id="proMode">Pro Mode</button>
+        <!-- Opsi Foto -->
+        <div class="photo-options">
+            <button id="photoButton">Foto</button>
         </div>
 
-        <!-- Opsi Foto dan Video -->
-        <div class="photo-video-options">
-            <button id="photo4k">Foto 4K</button>
-            <button id="photo8k">Foto 8K</button>
-            <button id="video4k">Video 4K 30fps</button>
-            <button id="video8k">Video 8K 60fps</button>
-            <button id="videoMacro">Video Macro 8K 30fps</button>
+        <!-- Opsi Video -->
+        <div class="video-options">
+            <button id="videoButton">Video</button>
         </div>
 
-        <!-- Popup untuk Settings -->
+        <!-- Popup Settings -->
         <div id="settingsPopup" class="popup">
             <div class="popup-content">
                 <h2>Settings</h2>
@@ -199,94 +200,106 @@ button:hover {
             </div>
         </div>
 
-        <!-- Popup untuk HDR -->
-        <div id="hdrPopup" class="popup">
+        <!-- Popup Resolusi Foto -->
+        <div id="photoResolutionPopup" class="popup">
             <div class="popup-content">
-                <h3>HDR</h3>
-                <button id="hdrOn">Aktif</button>
-                <button id="hdrOff">Nonaktif</button>
+                <h3>Foto Resolusi</h3>
+                <button id="photo4k">4K</button>
+                <button id="photo8k">8K</button>
             </div>
         </div>
 
-        <!-- Popup untuk Timer -->
+        <!-- Popup Resolusi Video -->
+        <div id="videoResolutionPopup" class="popup">
+            <div class="popup-content">
+                <h3>Video Resolusi</h3>
+                <button id="video4k">4K 30fps</button>
+                <button id="video8k">8K 60fps</button>
+            </div>
+        </div>
+
+        <!-- Popup HDR -->
+        <div id="hdrPopup" class="popup">
+            <div class="popup-content">
+                <h3>HDR</h3>
+                <button id="hdrAuto">Aktifkan HDR</button>
+                <button id="hdrOff">Nonaktifkan HDR</button>
+            </div>
+        </div>
+
+        <!-- Popup Timer -->
         <div id="timerPopup" class="popup">
             <div class="popup-content">
                 <h3>Timer</h3>
                 <button id="timer3d">3d</button>
                 <button id="timer5d">5d</button>
                 <button id="timer10d">10d</button>
+                <button id="timerOff">Nonaktifkan Timer</button>
             </div>
         </div>
 
-        <!-- Pro Settings -->
-        <div class="pro-settings" id="proSettings" style="display:none;">
-            <div class="setting">
-                <label for="ev">EV:</label>
-                <input type="range" id="ev" min="-3" max="3" step="0.1">
+        <!-- Popup QR Scan -->
+        <div id="qrScanPopup" class="popup">
+            <div class="popup-content">
+                <h3>Pindai QR</h3>
+                <button id="qrScanOn">Aktifkan</button>
+                <button id="qrScanOff">Nonaktifkan</button>
             </div>
-            <div class="setting">
-                <label for="shutterSpeed">Shutter Speed:</label>
-                <input type="range" id="shutterSpeed" min="1" max="1000">
-            </div>
-            <div class="setting">
-                <label for="iso">ISO:</label>
-                <input type="range" id="iso" min="100" max="6400">
-            </div>
-            <div class="setting">
-                <label for="wb">White Balance:</label>
-                <input type="range" id="wb" min="2000" max="10000">
-            </div>
-            <div class="setting">
-                <label for="af">Auto Focus:</label>
-                <input type="checkbox" id="af">
-            </div>
-            <div class="setting">
-                <label for="manualExp">Manual Exposure:</label>
-                <input type="checkbox" id="manualExp">
-            </div>
+        </div>
+
+        <!-- Bar Suara Rana dan Fokus AI -->
+        <div class="control-bar">
+            <button id="shutterSoundButton">Suara Rana</button>
+            <button id="focusAIButton">Fokus AI</button>
+        </div>
+
+        <!-- Flash Control -->
+        <div class="flash-bar">
+            <button id="flashOffButton">Flash Mati</button>
+            <button id="flashOnButton">Flash Nyalakan Saat Foto</button>
+            <button id="flashAlwaysButton">Flash Nyalakan Terus</button>
+        </div>
+
+        <!-- Dynamic Island -->
+        <div id="dynamicIsland" class="dynamic-island">
+            <h3>Video Recording Time: <span id="videoTime">00:00</span></h3>
         </div>
     </div>
 
     <script>
         // Mengambil elemen-elemen dari HTML
 const videoElement = document.getElementById('camera');
-const zoom0_5xButton = document.getElementById('zoom0.5x');
-const zoom1xButton = document.getElementById('zoom1x');
-const zoom20xButton = document.getElementById('zoom20x');
 const settingsButton = document.getElementById('settingsButton');
 const flashButton = document.getElementById('flashButton');
 const borderSizeButton = document.getElementById('borderSizeButton');
-const settingsPopup = document.getElementById('settingsPopup');
+const photoButton = document.getElementById('photoButton');
+const videoButton = document.getElementById('videoButton');
 const hdrButton = document.getElementById('hdrButton');
-const hdrPopup = document.getElementById('hdrPopup');
 const timerButton = document.getElementById('timerButton');
-const timerPopup = document.getElementById('timerPopup');
 const qrScanButton = document.getElementById('qrScanButton');
-const hdrOnButton = document.getElementById('hdrOn');
-const hdrOffButton = document.getElementById('hdrOff');
-const timer3dButton = document.getElementById('timer3d');
-const timer5dButton = document.getElementById('timer5d');
-const timer10dButton = document.getElementById('timer10d');
-const proSettings = document.getElementById('proSettings');
-const afCheckbox = document.getElementById('af');
-const shutterSpeedInput = document.getElementById('shutterSpeed');
-const isoInput = document.getElementById('iso');
-const wbInput = document.getElementById('wb');
 
-// Opsi Foto dan Video
-const photo4kButton = document.getElementById('photo4k');
-const photo8kButton = document.getElementById('photo8k');
-const video4kButton = document.getElementById('video4k');
-const video8kButton = document.getElementById('video8k');
-const videoMacroButton = document.getElementById('videoMacro');
+// Popups
+const settingsPopup = document.getElementById('settingsPopup');
+const photoResolutionPopup = document.getElementById('photoResolutionPopup');
+const videoResolutionPopup = document.getElementById('videoResolutionPopup');
+const hdrPopup = document.getElementById('hdrPopup');
+const timerPopup = document.getElementById('timerPopup');
+const qrScanPopup = document.getElementById('qrScanPopup');
 
-// Variabel pengaturan
-let currentZoom = 1;
-let hdrEnabled = false;
-let timer = null;
-let qrScanEnabled = false;
+// Flash Buttons
+const flashOffButton = document.getElementById('flashOffButton');
+const flashOnButton = document.getElementById('flashOnButton');
+const flashAlwaysButton = document.getElementById('flashAlwaysButton');
 
-// Fungsi untuk memulai kamera
+// Suara Rana dan Fokus AI Buttons
+const shutterSoundButton = document.getElementById('shutterSoundButton');
+const focusAIButton = document.getElementById('focusAIButton');
+
+// Dynamic Island
+const dynamicIsland = document.getElementById('dynamicIsland');
+const videoTimeElement = document.getElementById('videoTime');
+
+// Mengaktifkan kamera
 function startCamera() {
     const constraints = {
         video: {
@@ -304,74 +317,73 @@ function startCamera() {
     });
 }
 
-// Fungsi untuk mengubah zoom
-function setZoom(zoomLevel) {
-    const stream = videoElement.srcObject;
-    if (!stream) return;
-
-    const track = stream.getVideoTracks()[0];
-    const capabilities = track.getCapabilities();
-    const constraints = track.getConstraints();
-    
-    if (capabilities.zoom) {
-        constraints.zoom = Math.min(Math.max(constraints.zoom + zoomLevel, capabilities.zoom.min), capabilities.zoom.max);
-        track.applyConstraints(constraints);
-    }
+// Fungsi untuk membuka dan menutup pop-up
+function togglePopup(popup) {
+    popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-// Fungsi untuk memilih resolusi foto dan video
-function setResolution(resolution) {
-    const stream = videoElement.srcObject;
-    if (!stream) return;
+// Foto dan Video Resolusi
+photoButton.addEventListener('click', () => togglePopup(photoResolutionPopup));
+videoButton.addEventListener('click', () => togglePopup(videoResolutionPopup));
 
-    const track = stream.getVideoTracks()[0];
-    const constraints = track.getConstraints();
-    
-    if (resolution === '4k') {
-        constraints.width = 3840;
-        constraints.height = 2160;
-    } else if (resolution === '8k') {
-        constraints.width = 7680;
-        constraints.height = 4320;
-    } else if (resolution === 'video4k') {
-        constraints.width = 3840;
-        constraints.height = 2160;
-        constraints.frameRate = 30;
-    } else if (resolution === 'video8k') {
-        constraints.width = 7680;
-        constraints.height = 4320;
-        constraints.frameRate = 60;
-    } else if (resolution === 'videoMacro') {
-        constraints.width = 7680;
-        constraints.height = 4320;
-        constraints.frameRate = 30;
-        // Aktifkan mode macro jika ada
+// Pilih resolusi foto
+document.getElementById('photo4k').addEventListener('click', () => {
+    setResolution('4k'); // Resolusi Foto 4K
+    togglePopup(photoResolutionPopup);
+});
+document.getElementById('photo8k').addEventListener('click', () => {
+    setResolution('8k'); // Resolusi Foto 8K
+    togglePopup(photoResolutionPopup);
+});
+
+// Pilih resolusi video
+document.getElementById('video4k').addEventListener('click', () => {
+    setResolution('video4k'); // Resolusi Video 4K 30fps
+    togglePopup(videoResolutionPopup);
+});
+document.getElementById('video8k').addEventListener('click', () => {
+    setResolution('video8k'); // Resolusi Video 8K 60fps
+    togglePopup(videoResolutionPopup);
+});
+
+// HDR
+hdrButton.addEventListener('click', () => togglePopup(hdrPopup));
+
+// Timer
+timerButton.addEventListener('click', () => togglePopup(timerPopup));
+
+// QR Scan
+qrScanButton.addEventListener('click', () => togglePopup(qrScanPopup));
+
+// Flash
+flashButton.addEventListener('click', () => {
+    if (flashOffButton.style.display === 'none') {
+        flashOffButton.style.display = 'inline-block';
+        flashOnButton.style.display = 'none';
+        flashAlwaysButton.style.display = 'none';
+    } else {
+        flashOffButton.style.display = 'none';
+        flashOnButton.style.display = 'inline-block';
+        flashAlwaysButton.style.display = 'none';
     }
-    track.applyConstraints(constraints);
+});
+
+// Fungsi pengaturan flash
+flashOffButton.addEventListener('click', () => {
+    toggleFlash('off');
+});
+flashOnButton.addEventListener('click', () => {
+    toggleFlash('on');
+});
+flashAlwaysButton.addEventListener('click', () => {
+    toggleFlash('always');
+});
+
+function toggleFlash(mode) {
+    // Implementasikan pengaturan flash ke kamera
 }
 
-// Event listeners untuk tombol foto dan video
-photo4kButton.addEventListener('click', () => {
-    setResolution('4k'); // Foto 4K
-});
-
-photo8kButton.addEventListener('click', () => {
-    setResolution('8k'); // Foto 8K
-});
-
-video4kButton.addEventListener('click', () => {
-    setResolution('video4k'); // Video 4K 30fps
-});
-
-video8kButton.addEventListener('click', () => {
-    setResolution('video8k'); // Video 8K 60fps
-});
-
-videoMacroButton.addEventListener('click', () => {
-    setResolution('videoMacro'); // Video Macro 8K 30fps
-});
-
-// Inisialisasi kamera saat pertama kali
+// Inisialisasi kamera
 startCamera();
 
     </script>
