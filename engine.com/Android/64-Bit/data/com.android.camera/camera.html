@@ -1,169 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kamera React</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camera App</title>
+  <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.230.1/dist/lucide-react.min.js"></script>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .video-container {
+      position: relative;
+      border-radius: 50px;
+      overflow: hidden;
+      border: 8px solid #4a4a4a;
+    }
+    video {
+      width: 100%;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+    }
+    button {
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      color: white;
+    }
+    .zoom-controls button {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    .capture-button {
+      background-color: white;
+      color: black;
+      flex: 1;
+      padding: 15px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .capture-button.recording {
+      background-color: red;
+      animation: pulse 1s infinite;
+    }
+    .capture-button svg {
+      margin-right: 10px;
+    }
+    .image-preview, .video-preview {
+      margin-top: 20px;
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    .download-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: #3b82f6;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <div id="root"></div>
+<body>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+  <div class="video-container">
+    <video id="video" autoplay playsinline></video>
+    <div class="zoom-controls">
+      <button id="zoom-in">+</button>
+      <button id="zoom-out">-</button>
+    </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide-icons/0.2.3/index.umd.js"></script>
-    
-    <script>
-        const { useState, useRef, useEffect } = React;
-        const { Camera, Video, ZoomIn, ZoomOut, Download } = lucideIcons;
+  <div class="controls">
+    <button id="capture-btn" class="capture-button">
+      <span id="capture-icon"></span>
+      <span id="capture-text">Tangkap Foto</span>
+    </button>
+  </div>
 
-        const CameraApp = () => {
-            const [mode, setMode] = useState('photo'); // photo, video, macro
-            const [resolution, setResolution] = useState({ width: 3840, height: 2160, fps: 30 });
-            const [zoom, setZoom] = useState(1);
-            const [popupSettings, setPopupSettings] = useState({ open: false, type: null });
-            const [isRecording, setIsRecording] = useState(false);
-            const [recordedChunks, setRecordedChunks] = useState([]);
-            const [capturedMedia, setCapturedMedia] = useState(null);
+  <div id="media-preview"></div>
+  <canvas id="canvas" style="display: none;"></canvas>
 
-            const videoRef = useRef(null);
-            const canvasRef = useRef(null);
-            const mediaRecorderRef = useRef(null);
-            const cameraModes = {
-                photo: {
-                    resolutions: [
-                        { name: '4K', width: 3840, height: 2160, fps: 30 },
-                        { name: '8K', width: 7680, height: 4320, fps: 30 }
-                    ]
-                },
-                video: {
-                    resolutions: [
-                        { name: '4K 30fps', width: 3840, height: 2160, fps: 30 },
-                        { name: '8K 60fps', width: 7680, height: 4320, fps: 60 }
-                    ]
-                },
-                macro: {
-                    resolutions: [
-                        { name: '8K 30fps', width: 7680, height: 4320, fps: 30 }
-                    ]
-                }
-            };
+  <script>
+    const videoElement = document.getElementById("video");
+    const captureButton = document.getElementById("capture-btn");
+    const captureIcon = document.getElementById("capture-icon");
+    const captureText = document.getElementById("capture-text");
+    const mediaPreview = document.getElementById("media-preview");
+    const canvas = document.getElementById("canvas");
+    const zoomInButton = document.getElementById("zoom-in");
+    const zoomOutButton = document.getElementById("zoom-out");
 
-            const startCamera = async () => {
-                try {
-                    const constraints = {
-                        video: { 
-                            width: { ideal: resolution.width },
-                            height: { ideal: resolution.height },
-                            frameRate: { ideal: resolution.fps }
-                        }
-                    };
-                    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-                    if (videoRef.current) {
-                        videoRef.current.srcObject = stream;
-                        if (mode === 'video') {
-                            mediaRecorderRef.current = new MediaRecorder(stream);
-                            mediaRecorderRef.current.ondataavailable = (event) => {
-                                if (event.data.size > 0) {
-                                    setRecordedChunks((prev) => prev.concat(event.data));
-                                }
-                            };
-                            mediaRecorderRef.current.onstop = () => {
-                                const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                                const videoURL = URL.createObjectURL(blob);
-                                setCapturedMedia(videoURL);
-                                setRecordedChunks([]);
-                            };
-                        }
-                    }
-                } catch (error) {
-                    console.error('Error accessing camera:', error);
-                    alert('Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.');
-                }
-            };
+    let stream;
+    let isRecording = false;
+    let mediaRecorder;
+    let recordedChunks = [];
+    let zoomLevel = 1;
+    let mode = "photo"; // 'photo' or 'video'
 
-            const captureMedia = () => {
-                if (mode === 'photo') {
-                    const canvas = canvasRef.current;
-                    const video = videoRef.current;
-                    if (canvas && video) {
-                        const context = canvas.getContext('2d');
-                        canvas.width = resolution.width;
-                        canvas.height = resolution.height;
-                        context.drawImage(video, 0, 0, resolution.width, resolution.height);
-                        setCapturedMedia(canvas.toDataURL('image/jpeg'));
-                    }
-                } else if (mode === 'video') {
-                    if (isRecording) {
-                        mediaRecorderRef.current.stop();
-                        setIsRecording(false);
-                    } else {
-                        mediaRecorderRef.current.start();
-                        setIsRecording(true);
-                    }
-                }
-            };
-
-            useEffect(() => {
-                startCamera();
-            }, [mode, resolution]);
-
-            const downloadMedia = () => {
-                const link = document.createElement('a');
-                link.href = capturedMedia;
-                link.download = mode === 'photo' 
-                    ? `photo_${resolution.width}x${resolution.height}.jpg` 
-                    : `video_${resolution.width}x${resolution.height}_${resolution.fps}fps.webm`;
-                link.click();
-            };
-
-            const handleZoom = (direction) => {
-                const newZoom = direction === 'in' ? Math.min(zoom + 0.5, 10) : Math.max(zoom - 0.5, 1);
-                setZoom(newZoom);
-            };
-
-            return (
-                <div className="p-4 max-w-md mx-auto bg-black text-white min-h-screen relative">
-                    <div className="rounded-[50px] overflow-hidden border-8 border-gray-700 relative">
-                        <video 
-                            ref={videoRef} 
-                            autoPlay 
-                            playsInline
-                            className="w-full"
-                            style={{ transform: `scale(${zoom})` }}
-                        />
-                    </div>
-
-                    <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                        <button onClick={() => handleZoom('in')} className="bg-white/20 p-2 rounded-full"><ZoomIn /></button>
-                        <button onClick={() => handleZoom('out')} className="bg-white/20 p-2 rounded-full"><ZoomOut /></button>
-                    </div>
-
-                    <div className="mt-4 flex space-x-4">
-                        <button onClick={captureMedia} className={`flex-1 py-3 rounded-full flex items-center justify-center ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-white text-black'}`}>
-                            {mode === 'photo' ? <Camera /> : <Video />}
-                            <span>{mode === 'photo' ? 'Tangkap Foto' : (isRecording ? 'Berhenti Rekam' : 'Mulai Rekam')}</span>
-                        </button>
-                    </div>
-
-                    {capturedMedia && (
-                        <div className="mt-4 relative">
-                            {mode === 'photo' ? (
-                                <img src={capturedMedia} alt="Foto yang Ditangkap" className="w-full rounded-xl" />
-                            ) : (
-                                <video src={capturedMedia} controls className="w-full rounded-xl" />
-                            )}
-                            <button onClick={downloadMedia} className="absolute bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full"><Download /></button>
-                        </div>
-                    )}
-
-                    <canvas ref={canvasRef} style={{ display: 'none' }} />
-                </div>
-            );
+    async function startCamera() {
+      try {
+        const constraints = {
+          video: {
+            width: { ideal: 3840 },
+            height: { ideal: 2160 },
+            frameRate: { ideal: 30 }
+          }
         };
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        videoElement.srcObject = stream;
 
-        ReactDOM.render(<CameraApp />, document.getElementById('root'));
-    </script>
+        if (mode === "video") {
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              recordedChunks.push(event.data);
+            }
+          };
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: "video/webm" });
+            const videoURL = URL.createObjectURL(blob);
+            displayCapturedMedia(videoURL, "video");
+            recordedChunks = [];
+          };
+        }
+      } catch (error) {
+        console.error("Error accessing camera:", error);
+        alert("Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.");
+      }
+    }
+
+    function captureMedia() {
+      if (mode === "photo") {
+        const context = canvas.getContext("2d");
+        canvas.width = videoElement.videoWidth;
+        canvas.height = videoElement.videoHeight;
+        context.drawImage(videoElement, 0, 0);
+        const photoDataURL = canvas.toDataURL("image/jpeg");
+        displayCapturedMedia(photoDataURL, "photo");
+      } else if (mode === "video") {
+        if (isRecording) {
+          mediaRecorder.stop();
+          isRecording = false;
+          captureButton.classList.remove("recording");
+          captureText.textContent = "Mulai Rekam";
+        } else {
+          mediaRecorder.start();
+          isRecording = true;
+          captureButton.classList.add("recording");
+          captureText.textContent = "Berhenti Rekam";
+        }
+      }
+    }
+
+    function displayCapturedMedia(media, type) {
+      let mediaElement;
+      if (type === "photo") {
+        mediaElement = document.createElement("img");
+        mediaElement.src = media;
+        mediaElement.classList.add("image-preview");
+      } else if (type === "video") {
+        mediaElement = document.createElement("video");
+        mediaElement.src = media;
+        mediaElement.controls = true;
+        mediaElement.classList.add("video-preview");
+      }
+      mediaPreview.innerHTML = "";
+      mediaPreview.appendChild(mediaElement);
+
+      const downloadButton = document.createElement("button");
+      downloadButton.textContent = "Download";
+      downloadButton.classList.add("download-button");
+      downloadButton.onclick = () => downloadMedia(media, type);
+      mediaPreview.appendChild(downloadButton);
+    }
+
+    function downloadMedia(media, type) {
+      const link = document.createElement("a");
+      link.href = media;
+      link.download = type === "photo" ? "photo.jpg" : "video.webm";
+      link.click();
+    }
+
+    function handleZoom(direction) {
+      const newZoom = direction === "in" ? Math.min(zoomLevel + 0.5, 10) : Math.max(zoomLevel - 0.5, 1);
+      zoomLevel = newZoom;
+      videoElement.style.transform = `scale(${newZoom})`;
+    }
+
+    zoomInButton.addEventListener("click", () => handleZoom("in"));
+    zoomOutButton.addEventListener("click", () => handleZoom("out"));
+    captureButton.addEventListener("click", captureMedia);
+
+    startCamera();
+  </script>
+
 </body>
 </html>
