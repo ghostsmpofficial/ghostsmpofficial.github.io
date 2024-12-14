@@ -24,15 +24,16 @@ body {
     position: relative;
     width: 90%;
     max-width: 700px;
-    border-radius: 20px;
+    height: 525px; /* 4:3 aspect ratio */
     background-color: #000; /* Warna hitam untuk tampilan kamera */
     overflow: hidden;
+    border-radius: 20px;
 }
 
 video {
     width: 100%;
-    height: auto;
-    border-radius: 20px;
+    height: 100%;
+    object-fit: cover;
 }
 
 .top-bar {
@@ -149,7 +150,7 @@ video {
     background-color: rgba(0, 123, 255, 1);
 }
 
-.mt-button.hidden {
+.mp-button.hidden {
     display: none; /* Menyembunyikan tombol 200MP bila diperlukan */
 }
 
@@ -227,15 +228,15 @@ video {
             <div id="resolutionContainer" class="options-container">
                 <button id="res4k" class="resolution-button">4K 120fps</button>
                 <button id="res8k" class="resolution-button">8K 120fps</button>
-                <button id="ultraStabilButton" class="resolution-button">Ultra Stabil</button>
             </div>
+
             <button id="mp200Button" class="mp-button hidden">200MP</button>
         </div>
 
         <div id="settingsPopup" class="popup">
             <div class="popup-content">
                 <h2>Pengaturan</h2>
-                <button class="close-button">X</button>
+                <button class="close-button">✖️</button>
                 <button id="hdrButton" class="round-button">HDR</button>
                 <button id="timerButton" class="round-button">Timer</button>
             </div>
@@ -244,15 +245,16 @@ video {
         <div id="flashPopup" class="popup">
             <div class="popup-content">
                 <h2>Pengaturan Flash</h2>
-                <button class="close-button">X</button>
+                <button class="close-button">✖️</button>
                 <button id="flashOffButton" class="round-button">Flash Off</button>
                 <button id="flashOnButton" class="round-button">Flash On</button>
                 <button id="flashAlwaysButton" class="round-button">Flash Always</button>
             </div>
         </div>
 
-        <div id="dynamicIsland" class="dynamic-island">
+        <div id="dynamicIsland" class="dynamic-island hidden">
             <h3>Waktu Perekaman: <span id="videoTime">00:00</span></h3>
+            <button id="stopVideoButton" class="round-button">Stop Rekam</button>
         </div>
     </div>
 
@@ -266,129 +268,116 @@ const takePhotoButton = document.getElementById('takePhotoButton');
 const modeButtons = document.querySelectorAll('.mode-button');
 const resolutionContainer = document.getElementById('resolutionContainer');
 const mp200Button = document.getElementById('mp200Button');
-const zoomButtons = document.querySelectorAll('.zoom-button');
+const dynamicIsland = document.getElementById('dynamicIsland');
+const videoTimeElement = document.getElementById('videoTime');
+const stopVideoButton = document.getElementById('stopVideoButton');
 
 let currentMode = 'photo';
-let currentZoom = 1; // Default zoom
+let recording = false;
+let videoStartTime;
+let videoInterval;
 
 function startCamera() {
     const constraints = {
         video: {
-            facingMode: 'environment', // Menggunakan kamera belakang
-            width: { ideal: 1920 }, // Lebar ideal untuk video
-            height: { ideal: 1080 }, // Tinggi ideal untuk video
-            // Zoom settings (akan diimplementasikan di fungsi di bawah)
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
         }
     };
 
     navigator.mediaDevices.getUserMedia(constraints)
         .then(stream => {
             videoElement.srcObject = stream;
-            // Periksa apakah kamera ultra wide tersedia
-            const track = stream.getVideoTracks()[0];
-            if (track.getCapabilities) {
-                const capabilities = track.getCapabilities();
-                console.log('Kamera mendukung:', capabilities);
-            }
         })
         .catch(error => {
             console.error('Gagal mengakses kamera:', error);
         });
 }
 
-function setZoom(zoom) {
-    // Menetapkan zoom pada kamera jika didukung
-    const constraints = {
-        video: {
-            zoom: zoom
-        }
-    };
-
-    // Dapatkan aliran dan setel zoom
-    navigator.mediaDevices.getUserMedia(constraints)
-        .then(stream => {
-            const track = stream.getVideoTracks()[0];
-            if ('applyConstraints' in track) {
-                track.applyConstraints({ advanced: [{ zoom }] })
-                    .catch(error => console.error('Gagal menetapkan zoom:', error));
-            }
-        });
-}
-
-// Ambil foto
+// Mengambil foto
 function takePhoto() {
-    const canvas = document.createElement('canvas');
-    canvas.width = videoElement.videoWidth;
-    canvas.height = videoElement.videoHeight;
-
-    const context = canvas.getContext('2d');
-    context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-    
-    canvas.toBlob((blob) => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'photo.png';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }, 'image/png');
+    // Implementasi pengambilan foto
 }
 
-// Toggle popup
-function togglePopup(popup) {
-    popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
+// Fungsi untuk mulai merekam video
+function startRecording() {
+    recording = true;
+    videoStartTime = Date.now();
+    dynamicIsland.classList.remove('hidden');
+
+    videoInterval = setInterval(() => {
+        const elapsedTime = Math.floor((Date.now() - videoStartTime) / 1000);
+        const minutes = Math.floor(elapsedTime / 60).toString().padStart(2, '0');
+        const seconds = (elapsedTime % 60).toString().padStart(2, '0');
+        videoTimeElement.textContent = `${minutes}:${seconds}`;
+    }, 1000);
 }
 
-// Pindah antara mode
+// Fungsi untuk menghentikan perekaman video
+function stopRecording() {
+    recording = false;
+    clearInterval(videoInterval);
+    dynamicIsland.classList.add('hidden');
+    videoTimeElement.textContent = '00:00';
+}
+
+// Menangani pemilihan mode kamera
 modeButtons.forEach(button => {
     button.addEventListener('click', () => {
         modeButtons.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
 
-        currentMode = button.id; // Menentukan mode yang sedang aktif
+        currentMode = button.id;
 
         if (currentMode === 'photo') {
             takePhotoButton.innerText = 'Foto';
-            mp200Button.classList.remove('hidden'); // Menampilkan tombol 200MP pada mode foto
-            resolutionContainer.style.display = 'none'; // Sembunyikan opsi resolusi
+            mp200Button.classList.remove('hidden');
+            resolutionContainer.style.display = 'none';
+            flashButton.classList.remove('hidden'); // Tampilkan flash
+            videoElement.style.filter = 'none'; // Hilangkan blur
         } else if (currentMode === 'video') {
             takePhotoButton.innerText = 'Rekam';
-            mp200Button.classList.add('hidden'); // Menyembunyikan tombol 200MP pada mode video
-            resolutionContainer.style.display = 'flex'; // Tampilkan opsi resolusi
+            mp200Button.classList.add('hidden');
+            resolutionContainer.style.display = 'flex';
+            flashButton.classList.add('hidden'); // Sembunyikan flash
+
+            // Logika untuk mulai merekam
+            takePhotoButton.onclick = startRecording;
         } else if (currentMode === 'macro') {
-            takePhotoButton.innerText = 'Foto'; // Kembali ke tombol foto
-            mp200Button.classList.add('hidden'); // Menyembunyikan tombol 200MP pada mode makro
-            resolutionContainer.style.display = 'none'; // Sembunyikan opsi resolusi
+            takePhotoButton.innerText = 'Foto';
+            mp200Button.classList.add('hidden');
+            resolutionContainer.style.display = 'none'; // Sembunyikan resolusi
+            flashButton.classList.add('hidden'); // Sembunyikan flash
+            videoElement.style.filter = 'blur(5px)'; // Memberikan efek blur
+        }
+
+        // Jika mode makro, menghilangkan efek blur saat kembali ke mode lain
+        if (currentMode !== 'macro') {
+            videoElement.style.filter = 'none';
         }
     });
 });
 
-// Mengatur fungsi zoom
-zoomButtons.forEach(button => {
+// Pilihan resolusi video
+const resolutionButtons = document.querySelectorAll('.resolution-button');
+resolutionButtons.forEach(button => {
     button.addEventListener('click', () => {
-        currentZoom = button.dataset.zoom; // Mengatur zoom saat ini
-        setZoom(currentZoom); // Memanggil fungsi zoom
+        const resolution = button.id === 'res4k' ? '4K 120fps' : '8K 120fps';
+        alert(`Resolusi diubah menjadi: ${resolution}`);
+        resolutionContainer.style.display = 'none'; // Tutup opsi resolusi
     });
 });
 
-// Tombol untuk mengambil foto
-takePhotoButton.addEventListener('click', () => {
-    if (currentMode === 'photo') {
-        takePhoto();
-    } else if (currentMode === 'video') {
-        console.log('Mulai merekam video'); // Logika untuk merekam video di sini
-    } else if (currentMode === 'macro') {
-        console.log('Dalam mode makro'); // Logika untuk makro di sini
-    }
+// Mengatur tombol 200MP
+mp200Button.addEventListener('click', () => {
+    alert('Kamera dijernihkan!');
 });
 
-// Pop-up pengaturan
+// Pop-up pengaturan dan flash
 settingsButton.addEventListener('click', () => {
     togglePopup(settingsPopup);
 });
-
-// Pop-up flash
 flashButton.addEventListener('click', () => {
     togglePopup(flashPopup);
 });
