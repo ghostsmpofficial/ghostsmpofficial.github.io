@@ -1,221 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Camera App</title>
-  <script src="https://cdn.jsdelivr.net/npm/lucide-react@0.230.1/dist/lucide-react.min.js"></script>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    .video-container {
-      position: relative;
-      border-radius: 50px;
-      overflow: hidden;
-      border: 8px solid #4a4a4a;
-    }
-    video {
-      width: 100%;
-    }
-    .controls {
-      margin-top: 20px;
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-    }
-    button {
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      color: white;
-    }
-    .zoom-controls button {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-    .capture-button {
-      background-color: white;
-      color: black;
-      flex: 1;
-      padding: 15px;
-      border-radius: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .capture-button.recording {
-      background-color: red;
-      animation: pulse 1s infinite;
-    }
-    .capture-button svg {
-      margin-right: 10px;
-    }
-    .image-preview, .video-preview {
-      margin-top: 20px;
-      max-width: 100%;
-      border-radius: 10px;
-    }
-    .download-button {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background-color: #3b82f6;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Kamera</title>
+    <style>
+      body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+video, canvas {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+.controls {
+    margin-top: 10px;
+}
+    </style>
 </head>
 <body>
-
-  <div class="video-container">
-    <video id="video" autoplay playsinline></video>
-    <div class="zoom-controls">
-      <button id="zoom-in">+</button>
-      <button id="zoom-out">-</button>
+    <div class="container">
+        <h1>Aplikasi Kamera</h1>
+        <video id="video" autoplay></video>
+        <div class="controls">
+            <select id="resolution">
+                <option value="640x480">640x480</option>
+                <option value="1280x720">1280x720</option>
+                <option value="1920x1080">1920x1080</option>
+            </select>
+            <button id="capture">Ambil Foto</button>
+        </div>
+        <canvas id="canvas"></canvas>
     </div>
-  </div>
+    <script>
+      const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const resolutionSelect = document.getElementById("resolution");
+const captureButton = document.getElementById("capture");
 
-  <div class="controls">
-    <button id="capture-btn" class="capture-button">
-      <span id="capture-icon"></span>
-      <span id="capture-text">Tangkap Foto</span>
-    </button>
-  </div>
-
-  <div id="media-preview"></div>
-  <canvas id="canvas" style="display: none;"></canvas>
-
-  <script>
-    const videoElement = document.getElementById("video");
-    const captureButton = document.getElementById("capture-btn");
-    const captureIcon = document.getElementById("capture-icon");
-    const captureText = document.getElementById("capture-text");
-    const mediaPreview = document.getElementById("media-preview");
-    const canvas = document.getElementById("canvas");
-    const zoomInButton = document.getElementById("zoom-in");
-    const zoomOutButton = document.getElementById("zoom-out");
-
-    let stream;
-    let isRecording = false;
-    let mediaRecorder;
-    let recordedChunks = [];
-    let zoomLevel = 1;
-    let mode = "photo"; // 'photo' or 'video'
-
-    async function startCamera() {
-      try {
-        const constraints = {
-          video: {
-            width: { ideal: 3840 },
-            height: { ideal: 2160 },
-            frameRate: { ideal: 30 }
-          }
-        };
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
-        videoElement.srcObject = stream;
-
-        if (mode === "video") {
-          mediaRecorder = new MediaRecorder(stream);
-          mediaRecorder.ondataavailable = (event) => {
-            if (event.data.size > 0) {
-              recordedChunks.push(event.data);
-            }
-          };
-          mediaRecorder.onstop = () => {
-            const blob = new Blob(recordedChunks, { type: "video/webm" });
-            const videoURL = URL.createObjectURL(blob);
-            displayCapturedMedia(videoURL, "video");
-            recordedChunks = [];
-          };
+async function startCamera() {
+    // Mendapatkan resolusi yang dipilih
+    const resolution = resolutionSelect.value.split('x');
+    const constraints = {
+        video: {
+            width: { ideal: parseInt(resolution[0]) },
+            height: { ideal: parseInt(resolution[1]) }
         }
-      } catch (error) {
-        console.error("Error accessing camera:", error);
-        alert("Tidak dapat mengakses kamera. Pastikan Anda memberikan izin.");
-      }
+    };
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+    } catch (error) {
+        console.error("Error accessing the camera: ", error);
     }
+}
 
-    function captureMedia() {
-      if (mode === "photo") {
-        const context = canvas.getContext("2d");
-        canvas.width = videoElement.videoWidth;
-        canvas.height = videoElement.videoHeight;
-        context.drawImage(videoElement, 0, 0);
-        const photoDataURL = canvas.toDataURL("image/jpeg");
-        displayCapturedMedia(photoDataURL, "photo");
-      } else if (mode === "video") {
-        if (isRecording) {
-          mediaRecorder.stop();
-          isRecording = false;
-          captureButton.classList.remove("recording");
-          captureText.textContent = "Mulai Rekam";
-        } else {
-          mediaRecorder.start();
-          isRecording = true;
-          captureButton.classList.add("recording");
-          captureText.textContent = "Berhenti Rekam";
-        }
-      }
-    }
+// Mengambil foto dari video
+function capturePhoto() {
+    const ctx = canvas.getContext("2d");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+}
 
-    function displayCapturedMedia(media, type) {
-      let mediaElement;
-      if (type === "photo") {
-        mediaElement = document.createElement("img");
-        mediaElement.src = media;
-        mediaElement.classList.add("image-preview");
-      } else if (type === "video") {
-        mediaElement = document.createElement("video");
-        mediaElement.src = media;
-        mediaElement.controls = true;
-        mediaElement.classList.add("video-preview");
-      }
-      mediaPreview.innerHTML = "";
-      mediaPreview.appendChild(mediaElement);
+// Mengubah resolusi saat dipilih
+resolutionSelect.addEventListener('change', startCamera);
 
-      const downloadButton = document.createElement("button");
-      downloadButton.textContent = "Download";
-      downloadButton.classList.add("download-button");
-      downloadButton.onclick = () => downloadMedia(media, type);
-      mediaPreview.appendChild(downloadButton);
-    }
-
-    function downloadMedia(media, type) {
-      const link = document.createElement("a");
-      link.href = media;
-      link.download = type === "photo" ? "photo.jpg" : "video.webm";
-      link.click();
-    }
-
-    function handleZoom(direction) {
-      const newZoom = direction === "in" ? Math.min(zoomLevel + 0.5, 10) : Math.max(zoomLevel - 0.5, 1);
-      zoomLevel = newZoom;
-      videoElement.style.transform = `scale(${newZoom})`;
-    }
-
-    zoomInButton.addEventListener("click", () => handleZoom("in"));
-    zoomOutButton.addEventListener("click", () => handleZoom("out"));
-    captureButton.addEventListener("click", captureMedia);
-
-    startCamera();
-  </script>
-
+// Menjalankan kamera saat halaman dimuat
+window.addEventListener('load', startCamera);
+captureButton.addEventListener('click', capturePhoto);
+    </script>
 </body>
 </html>
