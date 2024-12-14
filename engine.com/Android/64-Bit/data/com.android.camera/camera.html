@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aplikasi Kamera Infinix</title>
+    <title>Aplikasi Kamera Modern</title>
     <style>
-        /* Reset Styles */
-* {
+        * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #1a1a1a; /* Background gelap */
+    font-family: 'Arial', sans-serif;
+    background-color: #0e0e0e; /* Background hitam */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -26,8 +25,7 @@ body {
     width: 90%;
     max-width: 700px;
     border-radius: 20px;
-    background-color: #000; /* Hitam */
-    text-align: center;
+    background-color: #000; /* Warna hitam untuk tampilan kamera */
     overflow: hidden;
 }
 
@@ -41,28 +39,25 @@ video {
     display: flex;
     justify-content: space-between;
     padding: 15px;
-    background-color: rgba(0, 0, 0, 0.9); /* Transparan gelap */
-    color: #00bfff; /* Biru cerah */
+    background-color: rgba(20, 20, 20, 0.8); /* Transparan */
     position: absolute;
-    top: 10px; /* Menempatkan bar di atas kamera */
+    top: 10px;
     left: 0;
-    right: 0; /* Membuat lebar penuh */
-    z-index: 10; /* Pastikan di atas video */
+    right: 0;
+    z-index: 10;
 }
 
-.round-button {
-    background-color: #007bff; /* Biru */
-    color: white;
-    padding: 10px 15px;
+.icon-button {
+    background: transparent;
     border: none;
-    border-radius: 25px;
-    font-size: 14px;
+    color: white;
+    font-size: 20px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: color 0.3s;
 }
 
-.round-button:hover {
-    background-color: #0056b3; /* Gelap saat hover */
+.icon-button:hover {
+    color: #00bfff;
 }
 
 .photo-button-container {
@@ -71,56 +66,172 @@ video {
     margin: 20px 0;
 }
 
-.big-photo-button {
-    background-color: white; /* Tombol foto besar berwarna putih */
-    color: #333; /* Teks gelap */
+.big-button {
+    background-color: white; /* Warna putih untuk tombol utama */
+    color: #333;
     font-size: 24px;
     width: 120px;
     height: 120px;
     border: none;
-    border-radius: 60px; /* Membuatnya bulat */
-    line-height: 120px;  /* Centering the text vertically */
+    border-radius: 50%; /* Membuat tombol bulat */
+    line-height: 120px;
     cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.big-button:hover {
+    background-color: #f0f0f0; /* Warna saat hover */
+    transform: scale(1.05);
+}
+
+.zoom-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.zoom-button {
+    background-color: rgba(0, 123, 255, 0.8); /* Biru */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.zoom-button:hover {
+    background-color: rgba(0, 123, 255, 1); /* Biru lebih gelap saat hover */
+}
+
+.bottom-bar {
+    display: flex;
+    justify-content: space-around; /* Rata tengah */
+    padding: 10px;
+    background-color: rgba(20, 20, 20, 0.8); /* Transparan */
+}
+
+.mode-button {
+    background-color: transparent;
+    color: #ccc;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.mode-button.active {
+    color: #00bfff; /* Warna aktif */
+    font-weight: bold; /* Membuat tebal */
+}
+
+.mode-button:hover {
+    color: #fff; /* Berubah warna saat hover */
+}
+
+.options-container {
+    display: none;
+}
+
+.resolution-button {
+    background-color: rgba(0, 123, 255, 0.8); /* Biru */
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.resolution-button:hover {
+    background-color: rgba(0, 123, 255, 1);
+}
+
+.mt-button.hidden {
+    display: none; /* Menyembunyikan tombol 200MP bila diperlukan */
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Transparan hitam */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    position: relative; /* Mengatur posisi relatif untuk close button */
+}
+
+.close-button {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 5px 10px;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.dynamic-island {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 10px;
+}
     </style>
 </head>
 <body>
 
-    <!-- Container kamera -->
     <div class="camera-container">
         <video id="camera" autoplay></video>
 
-        <!-- Bar Atas di luar kamera -->
         <div class="top-bar">
-            <button id="settingsButton" class="round-button">Pengaturan</button>
-            <button id="flashButton" class="round-button">Flash</button>
+            <button id="settingsButton" class="icon-button">⚙️</button>
+            <button id="flashButton" class="icon-button">🔦</button>
         </div>
 
         <div class="photo-button-container">
-            <button id="takePhotoButton" class="big-photo-button">Foto</button>
+            <button id="takePhotoButton" class="big-button">Foto</button>
         </div>
 
-        <!-- Opsi Zoom Pindah ke sini -->
-        <div class="zoom-options">
-            <button id="zoom0.5x" class="round-button" data-zoom="0.5">0.5x</button>
-            <button id="zoom1x" class="round-button" data-zoom="1">1x</button>
-            <button id="zoom20x" class="round-button" data-zoom="20">20x</button>
+        <div class="zoom-controls">
+            <button id="zoom0.5x" class="zoom-button" data-zoom="0.5">0.5x</button>
+            <button id="zoom1x" class="zoom-button" data-zoom="1">1x</button>
+            <button id="zoom20x" class="zoom-button" data-zoom="20">20x</button>
         </div>
 
-        <!-- Bar Pengaturan Foto & Video -->
         <div class="bottom-bar">
-            <button id="photoButton" class="option-button">Foto</button>
-            <button id="videoButton" class="option-button">Video</button>
-            <button id="macroButton" class="option-button">Makro</button>
-            <div id="resolutionContainer" class="option-container" style="display: none;">
-                <button id="res4k" class="round-button" style="display: none;">4K 120fps</button>
-                <button id="res8k" class="round-button" style="display: none;">8K 120fps</button>
-                <button id="ultraStabilButton" class="round-button">Ultra Stabil</button>
+            <button id="photoButton" class="mode-button active">Foto</button>
+            <button id="videoButton" class="mode-button">Video</button>
+            <button id="macroButton" class="mode-button">Makro</button>
+
+            <div id="resolutionContainer" class="options-container">
+                <button id="res4k" class="resolution-button">4K 120fps</button>
+                <button id="res8k" class="resolution-button">8K 120fps</button>
+                <button id="ultraStabilButton" class="resolution-button">Ultra Stabil</button>
             </div>
-            <button id="mp200Button" class="mp-button" style="display: none;">200MP</button>
+            <button id="mp200Button" class="mp-button hidden">200MP</button>
         </div>
 
-        <!-- Popup Settings -->
         <div id="settingsPopup" class="popup">
             <div class="popup-content">
                 <h2>Pengaturan</h2>
@@ -130,7 +241,6 @@ video {
             </div>
         </div>
 
-        <!-- Popup Flash -->
         <div id="flashPopup" class="popup">
             <div class="popup-content">
                 <h2>Pengaturan Flash</h2>
@@ -141,7 +251,6 @@ video {
             </div>
         </div>
 
-        <!-- Dynamic Island -->
         <div id="dynamicIsland" class="dynamic-island">
             <h3>Waktu Perekaman: <span id="videoTime">00:00</span></h3>
         </div>
@@ -151,42 +260,58 @@ video {
         const videoElement = document.getElementById('camera');
 const settingsButton = document.getElementById('settingsButton');
 const flashButton = document.getElementById('flashButton');
-const flashOffButton = document.getElementById('flashOffButton');
-const flashOnButton = document.getElementById('flashOnButton');
-const flashAlwaysButton = document.getElementById('flashAlwaysButton');
 const settingsPopup = document.getElementById('settingsPopup');
 const flashPopup = document.getElementById('flashPopup');
 const takePhotoButton = document.getElementById('takePhotoButton');
-const zoomButtons = document.querySelectorAll('.zoom-options .round-button');
-const optionButtons = document.querySelectorAll('.bottom-bar .option-button');
-const closeButtons = document.querySelectorAll('.close-button');
-const mp200Button = document.getElementById('mp200Button');
+const modeButtons = document.querySelectorAll('.mode-button');
 const resolutionContainer = document.getElementById('resolutionContainer');
-const res4kButton = document.getElementById('res4k');
-const res8kButton = document.getElementById('res8k');
-const ultraStabilButton = document.getElementById('ultraStabilButton');
+const mp200Button = document.getElementById('mp200Button');
+const zoomButtons = document.querySelectorAll('.zoom-button');
 
-// Status
-let mode = 'photo';
-let currentZoom = 0; // Default zoom
+let currentMode = 'photo';
+let currentZoom = 1; // Default zoom
 
-// Mulai kamera
 function startCamera() {
     const constraints = {
         video: {
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            facingMode: 'environment',
-            zoom: currentZoom // Mengatur zoom
+            facingMode: 'environment', // Menggunakan kamera belakang
+            width: { ideal: 1920 }, // Lebar ideal untuk video
+            height: { ideal: 1080 }, // Tinggi ideal untuk video
+            // Zoom settings (akan diimplementasikan di fungsi di bawah)
         }
     };
 
     navigator.mediaDevices.getUserMedia(constraints)
         .then(stream => {
             videoElement.srcObject = stream;
+            // Periksa apakah kamera ultra wide tersedia
+            const track = stream.getVideoTracks()[0];
+            if (track.getCapabilities) {
+                const capabilities = track.getCapabilities();
+                console.log('Kamera mendukung:', capabilities);
+            }
         })
         .catch(error => {
             console.error('Gagal mengakses kamera:', error);
+        });
+}
+
+function setZoom(zoom) {
+    // Menetapkan zoom pada kamera jika didukung
+    const constraints = {
+        video: {
+            zoom: zoom
+        }
+    };
+
+    // Dapatkan aliran dan setel zoom
+    navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => {
+            const track = stream.getVideoTracks()[0];
+            if ('applyConstraints' in track) {
+                track.applyConstraints({ advanced: [{ zoom }] })
+                    .catch(error => console.error('Gagal menetapkan zoom:', error));
+            }
         });
 }
 
@@ -215,82 +340,65 @@ function togglePopup(popup) {
     popup.style.display = popup.style.display === 'flex' ? 'none' : 'flex';
 }
 
-// Pilih zoom
-zoomButtons.forEach(button => {
+// Pindah antara mode
+modeButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const zoomValue = button.dataset.zoom;
-        currentZoom = zoomValue; // Mengubah nilai zoom
-        startCamera(); // Memulai kembali kamera dengan zoom baru
-    });
-});
+        modeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
 
-// Opsi Foto, Video, dan Makro
-optionButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        const type = button.id; // 'photo', 'video', or 'macro'
+        currentMode = button.id; // Menentukan mode yang sedang aktif
 
-        if (type === 'photo') {
-            mode = 'photo';
-            mp200Button.style.display = 'block'; // Menampilkan tombol 200MP
-            mp200Button.innerHTML = '200MP';
-            mp200Button.classList.remove('selected'); // Menghapus status terpilih
-            resolutionContainer.style.display = 'none'; // Menghilangkan resolusi
-        } else if (type === 'video') {
-            mode = 'video';
-            takePhotoButton.innerHTML = 'Video';
-            mp200Button.innerHTML = 'Resolution';
-            mp200Button.classList.remove('selected'); // Menghapus status terpilih
-            resolutionContainer.style.display = 'block'; // Menampilkan opsi resolusi
-            res4kButton.style.display = 'inline-block'; // Menampilkan opsi 4K
-            res8kButton.style.display = 'inline-block'; // Menampilkan opsi 8K
-        } else if (type === 'macro') {
-            mode = 'macro';
-            takePhotoButton.innerHTML = 'Foto';
-            mp200Button.style.display = 'none'; // Menyembunyikan tombol 200MP
-            resolutionContainer.style.display = 'none'; // Menghilangkan resolusi
+        if (currentMode === 'photo') {
+            takePhotoButton.innerText = 'Foto';
+            mp200Button.classList.remove('hidden'); // Menampilkan tombol 200MP pada mode foto
+            resolutionContainer.style.display = 'none'; // Sembunyikan opsi resolusi
+        } else if (currentMode === 'video') {
+            takePhotoButton.innerText = 'Rekam';
+            mp200Button.classList.add('hidden'); // Menyembunyikan tombol 200MP pada mode video
+            resolutionContainer.style.display = 'flex'; // Tampilkan opsi resolusi
+        } else if (currentMode === 'macro') {
+            takePhotoButton.innerText = 'Foto'; // Kembali ke tombol foto
+            mp200Button.classList.add('hidden'); // Menyembunyikan tombol 200MP pada mode makro
+            resolutionContainer.style.display = 'none'; // Sembunyikan opsi resolusi
         }
     });
 });
 
-// Tombol untuk resolusi video
-res4kButton.addEventListener('click', () => {
-    console.log('Resolusi diatur ke 4K 120fps');
-});
-
-res8kButton.addEventListener('click', () => {
-    console.log('Resolusi diatur ke 8K 120fps');
-});
-
-// Tombol untuk ultra stabil
-ultraStabilButton.addEventListener('click', () => {
-    console.log('Ultra Stabil diaktifkan');
+// Mengatur fungsi zoom
+zoomButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        currentZoom = button.dataset.zoom; // Mengatur zoom saat ini
+        setZoom(currentZoom); // Memanggil fungsi zoom
+    });
 });
 
 // Tombol untuk mengambil foto
 takePhotoButton.addEventListener('click', () => {
-    if (mode === 'photo') {
+    if (currentMode === 'photo') {
         takePhoto();
-    } else if (mode === 'video') {
-        console.log('Mulai merekam video');
+    } else if (currentMode === 'video') {
+        console.log('Mulai merekam video'); // Logika untuk merekam video di sini
+    } else if (currentMode === 'macro') {
+        console.log('Dalam mode makro'); // Logika untuk makro di sini
     }
 });
 
+// Pop-up pengaturan
+settingsButton.addEventListener('click', () => {
+    togglePopup(settingsPopup);
+});
+
+// Pop-up flash
+flashButton.addEventListener('click', () => {
+    togglePopup(flashPopup);
+});
+
 // Menutup pop-up
-closeButtons.forEach(button => {
+document.querySelectorAll('.close-button').forEach(button => {
     button.addEventListener('click', (event) => {
         const popup = event.target.closest('.popup');
         popup.style.display = 'none';
     });
-});
-
-// Menampilkan tombol 200MP dan fungsinya
-mp200Button.addEventListener('click', () => {
-    if (mode === 'photo') {
-        mp200Button.classList.toggle('selected');
-        console.log('Mengaktifkan 200MP: Foto lebih HD dan jernih');
-    } else if (mode === 'video') {
-        resolutionContainer.style.display = resolutionContainer.style.display === 'none' ? 'block' : 'none';
-    } 
 });
 
 // Inisialisasi Kamera
