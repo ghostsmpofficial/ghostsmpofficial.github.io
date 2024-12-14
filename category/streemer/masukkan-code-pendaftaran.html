@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masukkan Kode Pendaftaran - Rank Streamer Ghost SMP</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto max-w-6xl px-6 py-10">
+        <div class="bg-white p-8 rounded-xl shadow-2xl">
+            <div class="flex items-center mb-8 border-b pb-4">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Tango_style_Wikipedia_Icon.svg/50px-Tango_style_Wikipedia_Icon.svg.png" alt="Wikipedia Logo" class="mr-4">
+                <h1 class="text-3xl font-extrabold text-gray-900">Masukkan Kode Pendaftaran</h1>
+            </div>
+
+            <section class="space-y-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-blue-600 mb-4">Masukkan Kode Anda</h2>
+                    <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                        <p class="font-semibold text-xl mb-3">Masukkan kode pendaftaran yang Anda dapatkan di halaman sebelumnya.</p>
+                        <form id="registrationForm" class="space-y-4">
+                            <div>
+                                <label for="registrationCode" class="block text-gray-700 font-medium mb-2">Kode Pendaftaran</label>
+                                <input type="text" id="registrationCode" name="registrationCode" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan kode pendaftaran" required>
+                            </div>
+
+                            <button type="submit" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                                Kirim Kode
+                            </button>
+                        </form>
+
+                        <div id="messageContainer" class="mt-4 text-center hidden">
+                            <p id="successMessage" class="text-green-600 font-semibold"></p>
+                            <p id="errorMessage" class="text-red-600 font-semibold"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="verificationContainer" class="hidden mt-6 text-center">
+                    <p class="font-semibold text-xl mb-4">Tolong Verifikasi</p>
+                    <div class="space-y-4">
+                        <button id="tiktokVerificationBtn" class="w-full bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 transition duration-300">
+                            TikTok Verification
+                        </button>
+                        <button id="youtubeVerificationBtn" class="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600 transition duration-300">
+                            YouTube Verification
+                        </button>
+                        <button id="twitchVerificationBtn" class="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition duration-300">
+                            Twitch Verification
+                        </button>
+                    </div>
+                </div>
+
+                <div id="waitingMessage" class="hidden mt-6 text-center text-yellow-600">
+                    <p class="font-semibold">Tunggu 1 sampai 6 hari untuk verifikasi lebih lanjut.</p>
+                </div>
+            </section>
+
+            <div class="mt-6">
+                <a href="index.html">
+                    <button class="w-full bg-gray-300 text-gray-800 py-3 rounded-lg hover:bg-gray-400 transition duration-300">
+                        Kembali ke Halaman Utama
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const registrationForm = document.getElementById('registrationForm');
+        const registrationCodeInput = document.getElementById('registrationCode');
+        const messageContainer = document.getElementById('messageContainer');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const verificationContainer = document.getElementById('verificationContainer');
+        const waitingMessage = document.getElementById('waitingMessage');
+        const tiktokVerificationBtn = document.getElementById('tiktokVerificationBtn');
+        const youtubeVerificationBtn = document.getElementById('youtubeVerificationBtn');
+        const twitchVerificationBtn = document.getElementById('twitchVerificationBtn');
+
+        // Simulating valid registration codes (you can replace this with an actual check)
+        const validCodes = ["ABCDE123456", "XYZ789654321", "REGISTRATION2024"];
+
+        registrationForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const enteredCode = registrationCodeInput.value.trim();
+
+            // Hide any previous messages
+            messageContainer.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            verificationContainer.classList.add('hidden');
+            waitingMessage.classList.add('hidden');
+
+            // Check if the entered code is valid
+            if (validCodes.includes(enteredCode)) {
+                successMessage.textContent = 'Selamat! Kode Anda berhasil diterima.';
+                successMessage.classList.remove('hidden');
+                
+                // Show verification buttons
+                verificationContainer.classList.remove('hidden');
+            } else {
+                errorMessage.textContent = 'Kode yang Anda masukkan salah. Silakan coba lagi.';
+                errorMessage.classList.remove('hidden');
+            }
+
+            // Clear the input field
+            registrationCodeInput.value = '';
+        });
+
+        tiktokVerificationBtn.addEventListener('click', function() {
+            // Open TikTok login page
+            window.location.href = "https://www.tiktok.com/login";
+            sendVerificationData('TikTok');
+        });
+
+        youtubeVerificationBtn.addEventListener('click', function() {
+            // Open YouTube login page
+            window.location.href = "https://accounts.google.com/ServiceLogin/identifier?service=youtube";
+            sendVerificationData('YouTube');
+        });
+
+        twitchVerificationBtn.addEventListener('click', function() {
+            // Open Twitch login page
+            window.location.href = "https://www.twitch.tv/login";
+            sendVerificationData('Twitch');
+        });
+
+        function sendVerificationData(platform) {
+            // Send registration code and verification platform to WhatsApp (Using a simulation here)
+            const registrationCode = registrationCodeInput.value;
+            const verificationMessage = `Kode Pendaftaran: ${registrationCode}\nVerifikasi Platform: ${platform}`;
+
+            // This function would use an API to send a message to the developer's WhatsApp.
+            console.log("Sending to WhatsApp:", verificationMessage);
+
+            // Show waiting message
+            waitingMessage.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
