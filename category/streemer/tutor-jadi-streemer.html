@@ -1,182 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rank Streamer Ghost SMP - Panduan & Pendaftaran</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        @keyframes codeGenAnimation {
+            0% { transform: rotate(0deg); opacity: 0.6; }
+            50% { transform: rotate(180deg); opacity: 0.8; }
+            100% { transform: rotate(360deg); opacity: 1; }
+        }
+        .code-generate-animation {
+            animation: codeGenAnimation 1.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto max-w-6xl px-6 py-10">
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Informasi Rank Streamer -->
+            <div class="bg-white p-8 rounded-xl shadow-2xl">
+                <div class="flex items-center mb-8 border-b pb-4">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Tango_style_Wikipedia_Icon.svg/50px-Tango_style_Wikipedia_Icon.svg.png" alt="Wikipedia Logo" class="mr-4">
+                    <h1 class="text-3xl font-extrabold text-gray-900">Rank Streamer Ghost SMP</h1>
+                </div>
 
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>GhostSmp - Rank Streamer</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-		<link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
-		<link href="https://it.allfont.net/allfont.css?fonts=comic-sans-ms" rel="stylesheet" type="text/css">
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-		<script src="https://kit.fontawesome.com/a1f6a7827b.js" crossorigin="anonymous"></script>
-		<link rel="icon" href="images/logo.png">
-		<style>
-			.rank-content {
-				padding: 20px;
-				background: #f4f4f4;
-				margin: 20px 0;
-			}
-			.rank-content h2 {
-				color: #333;
-				border-bottom: 2px solid #666;
-				padding-bottom: 10px;
-			}
-			.rank-content ul, .rank-content ol {
-				margin-left: 30px;
-			}
-			.rank-requirements {
-				background: #e9ecef;
-				padding: 15px;
-				border-radius: 5px;
-				margin: 15px 0;
-			}
-		</style>
-	</head>
-	<body class="landing is-preload" oncontextmenu="return false" onselect="return false" ondragstart="return false">
+                <section class="space-y-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-blue-600 mb-4">Persyaratan Resmi</h2>
+                        <div class="bg-blue-50 p-6 rounded-lg border-l-4 border-blue-500">
+                            <h3 class="font-semibold text-xl mb-3">Kriteria Platform Streaming</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>YouTube Gaming: Minimal 1.000 subscribers</li>
+                                <li>Twitch: Minimal 750 followers</li>
+                                <li>Facebook Gaming: Minimal 500 followers</li>
+                                <li>TikTok Live: Minimal 10.000 followers</li>
+                            </ul>
+                        </div>
+                    </div>
 
-		<!-- Back to top button -->
-      <a id="buttontop"></a>
+                    <div>
+                        <h2 class="text-2xl font-bold text-green-600 mb-4">Ketentuan Live Streaming</h2>
+                        <div class="bg-green-50 p-6 rounded-lg border-l-4 border-green-500">
+                            <h3 class="font-semibold text-xl mb-3">Persyaratan Streaming</h3>
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Minimal 5 sesi live streaming Ghost SMP</li>
+                                <li>Durasi setiap sesi minimal 2 jam</li>
+                                <li>Dokumentasikan setiap sesi dengan screenshot/video bukti</li>
+                                <li>Konten harus fokus pada aktivitas di Ghost SMP</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
 
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+            <!-- Pendaftaran Kode -->
+            <div class="bg-white p-8 rounded-xl shadow-2xl flex flex-col justify-center">
+                <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Dapatkan Kode Pendaftaran</h2>
+                
+                <div id="codeGeneratorContainer" class="space-y-4">
+                    <button id="generateCodeBtn" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-300">
+                        Klik untuk Dapatkan Kode Pendaftaran
+                    </button>
+                </div>
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<div style='margin:15px; padding:10px;'>
-							<a href="/"><img src="images/logo.png" alt="logo" id="logo" width="258" height="55"></a>
-						</div>
-						<nav id="nav">
-							<ul>
-								<li class="special">
-									<a href="#menu" class="menuToggle"><span>Menu</span></a>
-									<div id="menu">
-										<ul>
-											<li><a style="cursor: pointer;" onClick="window.open('/', '_self')">Home</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('store', '_blank')">Store</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('vote', '_self')" >Vote</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('peraturan', '_self')">Peraturan</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('pencalonan', '_self')">Pencalonan</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('pengumuman', '_self')">Papan pengumuman</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('staff', '_self')">Staff</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('social', '_self')">Social</a></li>
-										</ul>
-									</div>
-								</li>
-							</ul>
-						</nav>
-					</header>
+                <div id="codeResultContainer" class="hidden mt-4">
+                    <div id="codeResult" class="border-4 border-dashed border-green-500 p-4 rounded-lg text-center text-xl font-bold"></div>
+                    <p id="successMessage" class="mt-2 text-green-600 font-semibold hidden text-center">
+                        Selamat! Anda berhasil mendapatkan kode pendaftaran.
+                    </p>
+                    <p id="failedMessage" class="mt-2 text-red-600 font-semibold hidden text-center">
+                        Maaf, Anda belum beruntung. Coba lagi nanti!
+                    </p>
+                </div>
 
-				<!-- Main Content -->
-					<section id="main" class="wrapper">
-						<div class="inner">
-							<h1 class="major">Cara Mendapatkan Rank Streamer di Ghost SMP</h1>
-							
-							<div class="rank-content">
-								<h2>Pendahuluan</h2>
-								<p>Rank Streamer adalah status istimewa di server Ghost SMP yang diberikan kepada anggota komunitas yang aktif melakukan streaming atau konten kreasi yang terkait dengan server.</p>
-								
-								<div class="rank-requirements">
-									<h2>Persyaratan Umum</h2>
-									<ul>
-										<li>Memiliki platform streaming aktif (YouTube, Twitch, Facebook Gaming)</li>
-										<li>Minimal 100 subscriber atau follower</li>
-										<li>Telah melakukan streaming minimal 3 kali tentang server Ghost SMP</li>
-										<li>Memiliki rekaman atau bukti streaming yang dapat diverifikasi</li>
-									</ul>
-								</div>
+                <div class="mt-6 text-sm text-gray-600 text-center">
+                    <strong>Catatan:</strong> Satu akun hanya bisa mendapatkan kode sekali.
+                </div>
+            </div>
+        </div>
+    </div>
 
-								<h2>Prosedur Pengajuan</h2>
-								<ol>
-									<li><strong>Persiapan Dokumen</strong>
-										<ul>
-											<li>Kumpulkan link channel streaming</li>
-											<li>Sertakan tangkapan layar statistik channel</li>
-											<li>Dokumentasikan minimal 3 video streaming server Ghost SMP</li>
-										</ul>
-									</li>
-									<li><strong>Pengajuan</strong>
-										<ul>
-											<li>Kunjungi halaman "Pencalonan" di website resmi Ghost SMP</li>
-											<li>Isi formulir pengajuan Rank Streamer</li>
-											<li>Lampirkan bukti-bukti yang diperlukan</li>
-										</ul>
-									</li>
-									<li><strong>Verifikasi</strong>
-										<ul>
-											<li>Tim staff akan meninjau pengajuan dalam waktu 3-5 hari kerja</li>
-											<li>Akan dilakukan pengecekan keabsahan dokumen dan channel streaming</li>
-										</ul>
-									</li>
-								</ol>
+    <script>
+        const generateCodeBtn = document.getElementById('generateCodeBtn');
+        const codeResultContainer = document.getElementById('codeResultContainer');
+        const codeResult = document.getElementById('codeResult');
+        const successMessage = document.getElementById('successMessage');
+        const failedMessage = document.getElementById('failedMessage');
 
-								<h2>Kriteria Penilaian</h2>
-								<ul>
-									<li>Kualitas konten streaming</li>
-									<li>Jumlah viewer rata-rata</li>
-									<li>Kontribusi terhadap promosi server Ghost SMP</li>
-									<li>Keaktifan dalam komunitas server</li>
-								</ul>
+        function generateRandomCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 12; i++) {
+                code += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return code;
+        }
 
-								<h2>Manfaat Rank Streamer</h2>
-								<ul>
-									<li>Badge khusus di dalam server</li>
-									<li>Akses ke area eksklusif</li>
-									<li>Kemungkinan kerja sama sponsorship</li>
-									<li>Prioritas dalam event-event server</li>
-								</ul>
-
-								<h2>Catatan Tambahan</h2>
-								<ul>
-									<li>Rank Streamer bersifat tidak permanen dan akan ditinjau ulang setiap 3 bulan</li>
-									<li>Penyalahgunaan rank dapat mengakibatkan pencabutan status</li>
-								</ul>
-							</div>
-						</div>
-					</section>
-
-				<!-- CTA -->
-					<section id="cta" class="wrapper style4">
-						<div class="inner">
-							<header>
-								<h2>Ingin Menjadi Streamer Resmi?</h2>
-								<p>Hubungi staff kami untuk informasi lebih lanjut!</p>
-							</header>
-							<ul class="actions stacked">
-								<li><a href="mailto:ghost.smp.offficial@gmail.com" class="button fit primary">Kirim E-MAIL</a></li>
-							</ul>
-						</div>
-					</section>
-
-				<!-- Footer -->
-				<footer id="footer">
-					<ul class="icons">
-						<li><a href="https://t.me/ServerNameChat" target="_blank" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
-						<li><a href="https://discord.gg/p6At8NZ2" target="_blank" class="icon brands fa-discord"><span class="label">Discord</span></a></li>
-						<li><a href="http://tiktok.ServerName.net" target="_blank" class="icon brands fa-tiktok"><span class="label">TikTok</span></a></li>
-						<li><a href="https://www.instagram.com/ServerName_official/" target="_blank" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="http://youtube.ServerName.net" target="_blank" class="icon brands fa-youtube"><span class="label">YouTube</span></a></li>
-					</ul>
-					<ul class="copyright">
-						<li>&copy; GhostSmp 2024 | Semua hak dilindungi undang-undang</li>
-					</ul>
-				</footer>
-
-			</div>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/buttontop.js"></script>
-			<script src="assets/js/clipboard.js"></script>
-			<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-			<script src="https://cdn.jsdelivr.net/gh/leonardosnt/mc-player-counter/dist/mc-player-counter.min.js"></script>
-			<script src="assets/js/cookie.js"></script>
-	</body>
+        generateCodeBtn.addEventListener('click', function() {
+            // Hide the button
+            generateCodeBtn.classList.add('hidden');
+            
+            // Show the result container
+            codeResultContainer.classList.remove('hidden');
+            
+            // Reset previous states
+            successMessage.classList.add('hidden');
+            failedMessage.classList.add('hidden');
+            
+            // Random chance of getting a code (60% success rate)
+            const isSuccessful = Math.random() < 0.6;
+            
+            if (isSuccessful) {
+                // Generate and display code with animation
+                codeResult.textContent = generateRandomCode();
+                codeResult.classList.add('code-generate-animation');
+                successMessage.classList.remove('hidden');
+            } else {
+                // Show failed message
+                codeResult.textContent = 'Tidak Tersedia';
+                failedMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
 </html>
