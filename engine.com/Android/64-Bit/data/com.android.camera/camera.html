@@ -43,6 +43,113 @@
             padding: 15px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
         }
+         .top-bar.transparent {
+            background-color: transparent;
+        }
+        .bottom-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 20px;
+            background-color: rgba(0,0,0,0.7);
+            transition: background-color 0.3s;
+        }
+        .bottom-bar.transparent {
+            background-color: transparent;
+        }
+        .full-screen-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .popup-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+        .popup-button {
+            background-color: rgba(50,50,50,0.7);
+            border: 2px solid #2196F3;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .popup-button.active {
+            background-color: #2196F3;
+        }
+        .icon-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .zoom-bar {
+            position: absolute;
+            bottom: 170px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+        .camera-mode-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .video-duration {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: none;
+        }
+        .capture-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid #2196F3;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .capture-button.video-mode {
+            background-color: white;
+        }
+        .capture-button.recording {
+            background-color: red;
+        }
+        .red-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            border-radius: 50%;
+            display: none;
+        }
         .zoom-bar {
             position: absolute;
             bottom: 170px;
@@ -154,8 +261,11 @@
         <div class="camera-overlay">
             <div class="top-bar">
                 <button class="icon-button" onclick="openSettingsPopup()">⚙️</button>
+                <button class="icon-button" onclick="openBorderPopup()">🖼️</button>
                 <button class="icon-button" onclick="openFlashPopup()">⚡</button>
             </div>
+
+            <div class="video-duration" id="videoDuration">00:00</div>
 
             <div class="zoom-bar">
                 <div class="zoom-container">
@@ -167,25 +277,53 @@
             </div>
 
             <div class="bottom-bar">
-                <div class="mode-switch">
-                    <button onclick="switchMode('foto')" class="active">Foto</button>
-                    <button onclick="switchMode('video')">Video</button>
+                <div class="camera-mode-buttons">
+                    <button id="highResButton" class="icon-button" onclick="toggle200MP()">200MP</button>
+                    <div class="mode-switch">
+                        <button onclick="switchMode('foto')" class="active">Foto</button>
+                        <button onclick="switchMode('video')">Video</button>
+                    </div>
                 </div>
-                
-                <button class="capture-button" onclick="captureMedia()"></button>
+
+                <button class="capture-button" onclick="captureMedia()">
+                    <div class="red-dot" id="recordingDot"></div>
+                </button>
             </div>
         </div>
 
-        <!-- Popup Settings -->
-        <div id="settingsPopup" class="popup">
-            <h2>Pengaturan</h2>
-            <div class="popup-buttons">
-                <button class="popup-button" onclick="openHDRPopup()">HDR</button>
-                <button class="popup-button">Fokus AI</button>
-                <button class="popup-button">Scan QR</button>
-                <button class="popup-button" onclick="closePopup('settingsPopup')">Tutup</button>
+        <!-- Full Screen Popup Pengaturan -->
+        <div id="settingsFullPopup" class="full-screen-popup">
+            <h1>Pengaturan Kamera</h1>
+            <div class="popup-grid">
+                <div class="popup-button" onclick="openHDRPopup()">HDR</div>
+                <div class="popup-button">Fokus AI</div>
+                <div class="popup-button">Scan QR</div>
             </div>
+            <button onclick="closeFullScreenPopup('settingsFullPopup')">Tutup</button>
         </div>
+
+        <!-- Full Screen Popup Border -->
+        <div id="borderFullPopup" class="full-screen-popup">
+            <h1>Pengaturan Border Kamera</h1>
+            <div class="popup-grid">
+                <div class="popup-button" onclick="setBorderMode('full')">Full Screen</div>
+                <div class="popup-button" onclick="setBorderMode('4:3')">4:3</div>
+                <div class="popup-button" onclick="setBorderMode('1:1')">1:1</div>
+            </div>
+            <button onclick="closeFullScreenPopup('borderFullPopup')">Tutup</button>
+        </div>
+
+        <!-- Popup Resolusi Video -->
+        <div id="videoResolutionPopup" class="full-screen-popup">
+            <h1>Resolusi Video</h1>
+            <div class="popup-grid">
+                <div class="popup-button" onclick="setVideoResolution('2K')">2K 120fps</div>
+                <div class="popup-button" onclick="setVideoResolution('4K')">4K 120fps</div>
+                <div class="popup-button" onclick="setVideoResolution('8K')">8K 60fps</div>
+            </div>
+            <button onclick="closeFullScreenPopup('videoResolutionPopup')">Tutup</button>
+        </div>
+    </div>
 
         <!-- Popup HDR -->
         <div id="hdrPopup" class="popup">
@@ -210,8 +348,21 @@
     <script>
         let currentMode = 'foto';
         let currentZoom = 1;
-        const video = document.getElementById('videoElement');
+        let is200MPActive = false;
+        let borderMode = 'full';
+        let videoResolution = '2K';
+        let isRecording = false;
+        let videoTimer = null;
+        let recordingDuration = 0;
 
+        const video = document.getElementById('videoElement');
+        const recordingDot = document.getElementById('recordingDot');
+        const videoDuration = document.getElementById('videoDuration');
+        const captureButton = document.querySelector('.capture-button');
+        const highResButton = document.getElementById('highResButton');
+        const topBar = document.querySelector('.top-bar');
+        const bottomBar = document.querySelector('.bottom-bar');
+        
         // Memulai kamera
         async function startCamera() {
             try {
@@ -227,12 +378,32 @@
             }
         }
 
+        // Toggle 200MP
+        function toggle200MP() {
+            is200MPActive = !is200MPActive;
+            highResButton.style.color = is200MPActive ? '#2196F3' : 'white';
+            alert(is200MPActive ? 'Mode Super Jernih 200MP Aktif' : 'Mode Super Jernih Dinonaktifkan');
+        }
+
         // Beralih mode
         function switchMode(mode) {
             currentMode = mode;
             const buttons = document.querySelectorAll('.mode-switch button');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+        }
+
+        // Sembunyikan/tampilkan tombol berdasarkan mode
+            if (mode === 'foto') {
+                highResButton.style.display = 'block';
+                captureButton.innerHTML = '';
+                captureButton.classList.remove('video-mode');
+            } else {
+                highResButton.style.display = 'none';
+                highResButton.textContent = 'Resolusi';
+                captureButton.innerHTML = '<div class="red-dot" id="recordingDot"></div>';
+                captureButton.classList.add('video-mode');
+            }
         }
 
         // Atur Zoom
@@ -242,6 +413,32 @@
             zoomButtons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             alert(`Zoom diatur ke ${level}x`);
+        }
+
+        // Atur Border Mode
+        function setBorderMode(mode) {
+            borderMode = mode;
+            const borderButtons = document.querySelectorAll('#borderFullPopup .popup-button');
+            borderButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (mode === 'full') {
+                topBar.classList.add('transparent');
+                bottomBar.classList.add('transparent');
+            } else {
+                topBar.classList.remove('transparent');
+                bottomBar.classList.remove('transparent');
+            }
+            closeFullScreenPopup('borderFullPopup');
+        }
+
+        // Atur Resolusi Video
+        function setVideoResolution(resolution) {
+            videoResolution = resolution;
+            const resolutionButtons = document.querySelectorAll('#videoResolutionPopup .popup-button');
+            resolutionButtons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            closeFullScreenPopup('videoResolutionPopup');
         }
 
         // Tangkap media
@@ -259,6 +456,62 @@
             } else {
                 alert('Fitur perekaman video dalam pengembangan');
             }
+        }
+
+        // Toggle Perekaman Video
+        function toggleVideoRecording() {
+            if (!isRecording) {
+                startVideoRecording();
+            } else {
+                stopVideoRecording();
+            }
+        }
+
+        // Mulai Rekam Video
+        function startVideoRecording() {
+            isRecording = true;
+            recordingDot.style.display = 'block';
+            captureButton.classList.add('recording');
+            videoDuration.style.display = 'block';
+            
+            recordingDuration = 0;
+            videoTimer = setInterval(() => {
+                recordingDuration++;
+                const minutes = Math.floor(recordingDuration / 60);
+                const seconds = recordingDuration % 60;
+                videoDuration.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+
+            alert(`Mulai Merekam Video dalam ${videoResolution}`);
+        }
+
+        // Berhenti Rekam Video
+        function stopVideoRecording() {
+            isRecording = false;
+            recordingDot.style.display = 'none';
+            captureButton.classList.remove('recording');
+            videoDuration.style.display = 'none';
+            
+            clearInterval(videoTimer);
+            alert(`Video ${videoResolution} telah direkam`);
+        }
+
+        // Popup Full Screen
+        function openSettingsPopup() {
+            document.getElementById('settingsFullPopup').style.display = 'flex';
+        }
+
+        function openBorderPopup() {
+            document.getElementById('borderFullPopup').style.display = 'flex';
+        }
+
+        function openFlashPopup() {
+            document.getElementById('videoResolutionPopup').style.display = 'flex';
+        }
+
+        function closeFullScreenPopup(popupId) {
+            document.getElementById(popupId).style.display = 'none';
         }
 
         // Popup fungsi
