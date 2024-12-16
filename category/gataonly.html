@@ -27,43 +27,26 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-        }
-
-        .navbar {
-            background-color: var(--secondary-dark);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-        }
-
-        .navbar-brand {
-            color: var(--text-light);
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .lyrics-progress {
-            color: var(--primary-red);
-            font-size: 0.8rem;
-            cursor: pointer;
+            overflow: hidden;
         }
 
         .music-player-container {
             display: flex;
-            flex-direction: column;
-            height: calc(100vh - 50px);
+            height: 100vh;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .music-player {
             background-color: var(--secondary-dark);
-            flex-grow: 1;
+            width: 60%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 30px;
             position: relative;
+            border-right: 2px solid var(--primary-red);
         }
 
         .music-player img {
@@ -85,12 +68,12 @@
             margin: 0;
             font-weight: bold;
             color: var(--text-light);
-            font-size: 1.5rem;
+            font-size: 1.8rem;
         }
 
         .song-info small {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .progress-container {
@@ -116,7 +99,6 @@
             align-items: center;
             gap: 30px;
             width: 100%;
-            padding: 0 20px;
         }
 
         .controls button {
@@ -127,12 +109,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             opacity: 0.7;
-            padding: 10px;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .controls button:hover {
@@ -142,52 +118,96 @@
         }
 
         .lyrics-container {
-            background-color: var(--dark-bg);
-            padding: 10px 15px;
-            max-height: 200px;
+            background-color: var(--secondary-dark);
+            width: 40%;
+            padding: 30px;
             overflow-y: auto;
-            text-align: center;
+            border-left: 2px solid var(--primary-red);
         }
 
         .lyrics {
-            color: var(--text-muted);
-            font-size: 14px;
-            line-height: 1.6;
+            color: var(--text-light);
+            font-size: 16px;
+            line-height: 2;
             white-space: pre-wrap;
+            opacity: 0.8;
+            text-align: center;
         }
 
-        @media (min-width: 769px) {
+        .premium-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .premium-modal-content {
+            background-color: var(--secondary-dark);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .premium-modal-content h2 {
+            color: var(--primary-red);
+            margin-bottom: 20px;
+        }
+
+        .premium-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .premium-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+
+        .premium-btn-buy {
+            background-color: var(--primary-red);
+            color: white;
+        }
+
+        .premium-btn-close {
+            background-color: var(--text-muted);
+            color: var(--dark-bg);
+        }
+
+        @media (max-width: 768px) {
             .music-player-container {
-                flex-direction: row;
-                max-width: 900px;
-                margin: 0 auto;
-                height: 100vh;
+                flex-direction: column;
+            }
+
+            .music-player, .lyrics-container {
+                width: 100%;
+                border: none;
             }
 
             .music-player {
-                width: 60%;
-                border-right: 2px solid var(--primary-red);
+                order: 1;
+                border-bottom: 2px solid var(--primary-red);
             }
 
             .lyrics-container {
-                width: 40%;
-                max-height: 100%;
-                overflow-y: auto;
-                padding: 20px;
-            }
-
-            .lyrics {
-                font-size: 16px;
+                order: 2;
+                max-height: 40vh;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-brand">Gata Only</div>
-        <div class="lyrics-progress" id="lyricsProgress">[Sisa lirik tersisa...]</div>
-    </nav>
-
     <div class="music-player-container">
         <div class="music-player">
             <img src="/gataonly.jpeg" alt="Gata Only Cover">
@@ -206,13 +226,13 @@
             </div>
 
             <div class="controls">
-                <button id="prevBtn" ontouchstart="" ontouchend="">
+                <button id="prevBtn">
                     <i class="fas fa-step-backward"></i>
                 </button>
-                <button id="playPauseBtn" ontouchstart="" ontouchend="">
+                <button id="playPauseBtn">
                     <i class="fas fa-play" id="playPauseIcon"></i>
                 </button>
-                <button id="nextBtn" ontouchstart="" ontouchend="">
+                <button id="nextBtn">
                     <i class="fas fa-step-forward"></i>
                 </button>
             </div>
@@ -232,6 +252,17 @@
         </div>
     </div>
 
+    <div class="premium-modal" id="premiumModal">
+        <div class="premium-modal-content">
+            <h2>Upgrade to Premium</h2>
+            <p>Ulangi lagu sebanyak yang kamu mau dengan Premium!</p>
+            <div class="premium-actions">
+                <a href="#" class="premium-btn premium-btn-buy" id="buyPremiumBtn">Beli Premium</a>
+                <a href="/" class="premium-btn premium-btn-close" id="closePremiumBtn">Kembali</a>
+            </div>
+        </div>
+    </div>
+
     <script>
         const audioPlayer = document.getElementById('audioPlayer');
         const progressContainer = document.getElementById('progressContainer');
@@ -241,33 +272,11 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const lyrics = document.getElementById('lyrics');
-        const lyricsProgress = document.getElementById('lyricsProgress');
+        const premiumModal = document.getElementById('premiumModal');
+        const buyPremiumBtn = document.getElementById('buyPremiumBtn');
+        const closePremiumBtn = document.getElementById('closePremiumBtn');
 
-        const lyricsList = [
-            `Mami, te siento lejo', dime dónde estás
-Te quiero chingar, te voy a raptar
-Déjate llevar y apaga el celular
-Que si estás conmigo no te va a pasar na'
-Solo déjate llevar
-'Tate atenta a la fuga
-Si yo quiero contigo y tú quiere' conmigo
-Dime si se da (brr)`,
-            `Ba-ba-baby, dale, ponte pa' mí, follow me
-Tú ere', like, for me y yo 'toy pa' ti
-Gata, tú está' only, mándame tu ubi
-Mueve los cachete' al ritmo del TikTok`,
-            `Mami, cuando quiera', tú no ta' pa' na'
-Mis 300 km por hora pa' que tú no pasa'
-Tú ere' bien clara, yo te lo aclar'
-Contigo no hay na', tú ta' pa' mo'a'
-
-Gata only, baby, ponte pa' mí
-Ese culo tuyo, ahora es pa' mí
-Tú ere' pa' lo sucio, tú ere' un thriller
-I'm the king, tú ere' mi whatever`
-        ];
-
-        let currentLyricsIndex = 0;
+        let playCount = 0;
 
         function togglePlayPause() {
             if (audioPlayer.paused) {
@@ -293,44 +302,37 @@ I'm the king, tú ere' mi whatever`
             audioPlayer.currentTime = percentage * audioPlayer.duration;
         }
 
-        function switchLyrics() {
-            currentLyricsIndex = (currentLyricsIndex + 1) % lyricsList.length;
-            lyrics.textContent = lyricsList[currentLyricsIndex];
-
-            if (currentLyricsIndex === lyricsList.length - 1) {
-                lyricsProgress.textContent = '[Kembali ke lirik pertama...]';
+        audioPlayer.addEventListener('ended', () => {
+            playCount++;
+            
+            if (playCount >= 2) {
+                premiumModal.style.display = 'flex';
+                audioPlayer.pause();
+                playPauseIcon.classList.remove('fa-pause');
+                playPauseIcon.classList.add('fa-play');
             } else {
-                lyricsProgress.textContent = '[Sisa lirik tersisa...]';
+                audioPlayer.play();
             }
-        }
+        });
 
         // Event Listeners
         playPauseBtn.addEventListener('click', togglePlayPause);
-        playPauseBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            togglePlayPause();
-        });
-
         prevBtn.addEventListener('click', () => console.log('Previous track'));
-        prevBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            console.log('Previous track');
-        });
-
         nextBtn.addEventListener('click', () => console.log('Next track'));
-        nextBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            console.log('Next track');
-        });
-
-        lyricsProgress.addEventListener('click', switchLyrics);
-        lyricsProgress.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            switchLyrics();
-        });
 
         audioPlayer.addEventListener('timeupdate', updateProgressBar);
         progressContainer.addEventListener('click', setProgress);
+
+        // Premium Modal Interactions
+        buyPremiumBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Fitur Premium akan segera hadir!');
+        });
+
+        closePremiumBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/';
+        });
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
