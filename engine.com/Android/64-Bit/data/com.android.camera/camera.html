@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamera Modern</title>
+    <title>Kamera Pro Modern</title>
     <style>
         * {
             margin: 0;
@@ -42,8 +42,9 @@
             justify-content: space-between;
             padding: 15px;
             background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+            transition: background-color 0.3s;
         }
-         .top-bar.transparent {
+        .top-bar.transparent {
             background-color: transparent;
         }
         .bottom-bar {
@@ -51,11 +52,84 @@
             flex-direction: column;
             align-items: center;
             padding-bottom: 20px;
-            background-color: rgba(0,0,0,0.7);
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             transition: background-color 0.3s;
         }
         .bottom-bar.transparent {
             background-color: transparent;
+        }
+        .zoom-bar {
+            position: absolute;
+            bottom: 170px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+        .zoom-container {
+            background-color: rgba(50,50,50,0.7);
+            border-radius: 30px;
+            display: flex;
+            padding: 5px;
+            gap: 10px;
+        }
+        .zoom-button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .zoom-button.active {
+            background-color: #2196F3;
+        }
+        .mode-switch {
+            display: flex;
+            background-color: rgba(50,50,50,0.5);
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .mode-switch button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .mode-switch button.active {
+            background-color: #2196F3;
+            color: white;
+        }
+        .capture-button {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            border: 5px solid #2196F3;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        .capture-button:active {
+            transform: scale(0.9);
+        }
+        .capture-button.video-mode {
+            background-color: white;
+        }
+        .capture-button.recording {
+            background-color: red;
+        }
+        .icon-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
         }
         .full-screen-popup {
             position: fixed;
@@ -91,27 +165,6 @@
         .popup-button.active {
             background-color: #2196F3;
         }
-        .icon-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .zoom-bar {
-            position: absolute;
-            bottom: 170px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: 10px;
-        }
-        .camera-mode-buttons {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
         .video-duration {
             position: absolute;
             top: 20px;
@@ -122,22 +175,6 @@
             padding: 5px 10px;
             border-radius: 20px;
             display: none;
-        }
-        .capture-button {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: white;
-            border: 5px solid #2196F3;
-            cursor: pointer;
-            position: relative;
-            transition: transform 0.2s;
-        }
-        .capture-button.video-mode {
-            background-color: white;
-        }
-        .capture-button.recording {
-            background-color: red;
         }
         .red-dot {
             position: absolute;
@@ -150,107 +187,10 @@
             border-radius: 50%;
             display: none;
         }
-        .zoom-bar {
-            position: absolute;
-            bottom: 170px;
-            left: 0;
-            width: 100%;
+        .camera-mode-buttons {
             display: flex;
-            justify-content: center;
-            padding: 10px;
-        }
-        .zoom-container {
-            background-color: rgba(50,50,50,0.7);
-            border-radius: 30px;
-            display: flex;
-            padding: 5px;
-            gap: 10px;
-        }
-        .zoom-button {
-            background: none;
-            border: none;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .zoom-button.active {
-            background-color: #2196F3;
-        }
-        .bottom-bar {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            padding-bottom: 20px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-        }
-        .mode-switch {
-            display: flex;
-            background-color: rgba(50,50,50,0.5);
-            border-radius: 30px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-        .mode-switch button {
-            background: none;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .mode-switch button.active {
-            background-color: #2196F3;
-            color: white;
-        }
-        .capture-button {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: white;
-            border: 5px solid #2196F3;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s;
-        }
-        .capture-button:active {
-            transform: scale(0.9);
-        }
-        .icon-button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(30,30,30,0.9);
-            border: 1px solid #2196F3;
-            border-radius: 15px;
-            padding: 20px;
-            width: 80%;
-            max-width: 400px;
-            z-index: 100;
-            display: none;
-        }
-        .popup-buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
-        }
-        .popup-button {
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
         }
     </style>
 </head>
@@ -270,7 +210,7 @@
             <div class="zoom-bar">
                 <div class="zoom-container">
                     <button class="zoom-button" onclick="setZoom(0.5)">0.5x</button>
-                    <button class="zoom-button" onclick="setZoom(1)">1x</button>
+                    <button class="zoom-button active" onclick="setZoom(1)">1x</button>
                     <button class="zoom-button" onclick="setZoom(2)">2x</button>
                     <button class="zoom-button" onclick="setZoom(20)">20x</button>
                 </div>
@@ -284,7 +224,7 @@
                         <button onclick="switchMode('video')">Video</button>
                     </div>
                 </div>
-
+                
                 <button class="capture-button" onclick="captureMedia()">
                     <div class="red-dot" id="recordingDot"></div>
                 </button>
@@ -296,8 +236,8 @@
             <h1>Pengaturan Kamera</h1>
             <div class="popup-grid">
                 <div class="popup-button" onclick="openHDRPopup()">HDR</div>
-                <div class="popup-button">Fokus AI</div>
-                <div class="popup-button">Scan QR</div>
+                <div class="popup-button" onclick="openAIFocusPopup()">Fokus AI</div>
+                <div class="popup-button" onclick="openQRScanPopup()">Scan QR</div>
             </div>
             <button onclick="closeFullScreenPopup('settingsFullPopup')">Tutup</button>
         </div>
@@ -313,35 +253,28 @@
             <button onclick="closeFullScreenPopup('borderFullPopup')">Tutup</button>
         </div>
 
-        <!-- Popup Resolusi Video -->
-        <div id="videoResolutionPopup" class="full-screen-popup">
-            <h1>Resolusi Video</h1>
+        <!-- Popup HDR -->
+        <div id="hdrFullPopup" class="full-screen-popup">
+            <h1>Pengaturan HDR</h1>
+            <div class="popup-grid">
+                <div class="popup-button" onclick="setHDR('nonaktif')">Nonaktif</div>
+                <div class="popup-button" onclick="setHDR('otomatis')">Otomatis</div>
+            </div>
+            <button onclick="closeFullScreenPopup('hdrFullPopup')">Tutup</button>
+        </div>
+
+        <!-- Popup Flash/Video Resolusi -->
+        <div id="flashResolutionPopup" class="full-screen-popup">
+            <h1>Resolusi Video & Flash</h1>
             <div class="popup-grid">
                 <div class="popup-button" onclick="setVideoResolution('2K')">2K 120fps</div>
                 <div class="popup-button" onclick="setVideoResolution('4K')">4K 120fps</div>
                 <div class="popup-button" onclick="setVideoResolution('8K')">8K 60fps</div>
+                <div class="popup-button" onclick="setFlash('off')">Flash Mati</div>
+                <div class="popup-button" onclick="setFlash('on')">Flash Nyala</div>
+                <div class="popup-button" onclick="setFlash('always')">Flash Selalu</div>
             </div>
-            <button onclick="closeFullScreenPopup('videoResolutionPopup')">Tutup</button>
-        </div>
-    </div>
-
-        <!-- Popup HDR -->
-        <div id="hdrPopup" class="popup">
-            <h2>Pengaturan HDR</h2>
-            <div class="popup-buttons">
-                <button class="popup-button" onclick="setHDR('nonaktif')">Nonaktif</button>
-                <button class="popup-button" onclick="setHDR('otomatis')">Otomatis</button>
-            </div>
-        </div>
-
-        <!-- Popup Flash -->
-        <div id="flashPopup" class="popup">
-            <h2>Pengaturan Flash</h2>
-            <div class="popup-buttons">
-                <button class="popup-button" onclick="setFlash('off')">Mati</button>
-                <button class="popup-button" onclick="setFlash('on')">Nyala</button>
-                <button class="popup-button" onclick="setFlash('always')">Selalu Nyala</button>
-            </div>
+            <button onclick="closeFullScreenPopup('flashResolutionPopup')">Tutup</button>
         </div>
     </div>
 
@@ -354,6 +287,8 @@
         let isRecording = false;
         let videoTimer = null;
         let recordingDuration = 0;
+        let flashMode = 'off';
+        let hdrMode = 'nonaktif';
 
         const video = document.getElementById('videoElement');
         const recordingDot = document.getElementById('recordingDot');
@@ -362,19 +297,24 @@
         const highResButton = document.getElementById('highResButton');
         const topBar = document.querySelector('.top-bar');
         const bottomBar = document.querySelector('.bottom-bar');
-        
+
         // Memulai kamera
         async function startCamera() {
             try {
-                const videoStream = await navigator.mediaDevices.getUserMedia({ 
+                const constraints = { 
                     video: { 
                         width: { ideal: 1920 }, 
-                        height: { ideal: 1080 } 
+                        height: { ideal: 1080 },
+                        advanced: [{
+                            zoom: currentZoom
+                        }]
                     } 
-                });
+                };
+                const videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 video.srcObject = videoStream;
             } catch (error) {
                 console.error("Error mengakses kamera", error);
+                alert("Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.");
             }
         }
 
@@ -391,13 +331,12 @@
             const buttons = document.querySelectorAll('.mode-switch button');
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
-        }
 
-        // Sembunyikan/tampilkan tombol berdasarkan mode
+            // Sembunyikan/tampilkan tombol berdasarkan mode
             if (mode === 'foto') {
                 highResButton.style.display = 'block';
                 captureButton.innerHTML = '';
-                captureButton.classList.remove('video-mode');
+                captureButton.classList.remove('video-mode', 'recording');
             } else {
                 highResButton.style.display = 'none';
                 highResButton.textContent = 'Resolusi';
@@ -413,6 +352,9 @@
             zoomButtons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             alert(`Zoom diatur ke ${level}x`);
+            
+            // Restart kamera dengan zoom baru
+            startCamera();
         }
 
         // Atur Border Mode
@@ -435,134 +377,29 @@
         // Atur Resolusi Video
         function setVideoResolution(resolution) {
             videoResolution = resolution;
-            const resolutionButtons = document.querySelectorAll('#videoResolutionPopup .popup-button');
-            resolutionButtons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            closeFullScreenPopup('videoResolutionPopup');
-        }
-
-        // Tangkap media
-        function captureMedia() {
-            if (currentMode === 'foto') {
-                const canvas = document.createElement('canvas');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                canvas.getContext('2d').drawImage(video, 0, 0);
-                const dataUrl = canvas.toDataURL('image/jpeg');
-                const link = document.createElement('a');
-                link.href = dataUrl;
-                link.download = 'foto.jpg';
-                link.click();
-            } else {
-                alert('Fitur perekaman video dalam pengembangan');
-            }
-        }
-
-        // Toggle Perekaman Video
-        function toggleVideoRecording() {
-            if (!isRecording) {
-                startVideoRecording();
-            } else {
-                stopVideoRecording();
-            }
-        }
-
-        // Mulai Rekam Video
-        function startVideoRecording() {
-            isRecording = true;
-            recordingDot.style.display = 'block';
-            captureButton.classList.add('recording');
-            videoDuration.style.display = 'block';
-            
-            recordingDuration = 0;
-            videoTimer = setInterval(() => {
-                recordingDuration++;
-                const minutes = Math.floor(recordingDuration / 60);
-                const seconds = recordingDuration % 60;
-                videoDuration.textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-
-            alert(`Mulai Merekam Video dalam ${videoResolution}`);
-        }
-
-        // Berhenti Rekam Video
-        function stopVideoRecording() {
-            isRecording = false;
-            recordingDot.style.display = 'none';
-            captureButton.classList.remove('recording');
-            videoDuration.style.display = 'none';
-            
-            clearInterval(videoTimer);
-            alert(`Video ${videoResolution} telah direkam`);
-        }
-
-        // Popup Full Screen
-        function openSettingsPopup() {
-            document.getElementById('settingsFullPopup').style.display = 'flex';
-        }
-
-        function openBorderPopup() {
-            document.getElementById('borderFullPopup').style.display = 'flex';
-        }
-
-        function openFlashPopup() {
-            document.getElementById('videoResolutionPopup').style.display = 'flex';
-        }
-
-        function closeFullScreenPopup(popupId) {
-            document.getElementById(popupId).style.display = 'none';
-        }
-
-        // Popup fungsi
-        function openSettingsPopup() {
-            document.getElementById('settingsPopup').style.display = 'block';
-        }
-
-        function openHDRPopup() {
-            document.getElementById('hdrPopup').style.display = 'block';
-        }
-
-        function openFlashPopup() {
-            document.getElementById('flashPopup').style.display = 'block';
-        }
-
-        function closePopup(popupId) {
-            document.getElementById(popupId).style.display = 'none';
-        }
-
-        // HDR
-        function setHDR(mode) {
-            alert(mode === 'otomatis' 
-                ? 'HDR Otomatis Diaktifkan' 
-                : 'HDR Dinonaktifkan');
-            closePopup('hdrPopup');
-        }
-
-        // Flash
-        function setFlash(mode) {
-            const flashModes = {
-                'off': 'Flash Dimatikan',
-                'on': 'Flash Saat Foto',
-                'always': 'Flash Selalu Nyala'
-            };
-            alert(flashModes[mode]);
-            closePopup('flashPopup');
-        }
-
-        // Tutup popup jika mengklik di luar
-        window.onclick = function(event) {
-            const popups = document.querySelectorAll('.popup');
-            popups.forEach(popup => {
-                if (event.target === popup) {
-                    popup.style.display = 'none';
+            const resolutionButtons = document.querySelectorAll('#flashResolutionPopup .popup-button');
+            resolutionButtons.forEach(btn => {
+                if (btn.textContent.startsWith(resolution)) {
+                    btn.classList.add('active');
+                } else if (btn.textContent.includes('fps')) {
+                    btn.classList.remove('active');
                 }
             });
+            closeFullScreenPopup('flashResolutionPopup');
         }
 
-         // Memulai kamera saat halaman dimuat
-        startCamera();
-        
-    </script>
-</body>
-</html>
+        // Atur Flash
+        function setFlash(mode) {
+            flashMode = mode;
+            const flashButtons = document.querySelectorAll('#flashResolutionPopup .popup-button');
+            flashButtons.forEach(btn => {
+                if (btn.textContent.includes('Flash')) {
+                    btn.classList.remove('active');
+                }
+                if (btn.textContent === {
+                    'off': 'Flash Mati',
+                    'on': 'Flash Nyala',
+                    'always': 'Flash Selalu'
+                }[mode]) {
+                    btn.classList.add('active');
+                }
