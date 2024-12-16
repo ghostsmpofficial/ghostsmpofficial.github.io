@@ -25,17 +25,23 @@
             margin: 0;
         }
 
+        .music-player-container {
+            display: flex;
+            background-color: var(--dark-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
         .music-player {
             background-color: var(--secondary-dark);
             padding: 20px;
-            width: 500px;
+            width: 400px;
             border-radius: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
-            overflow: hidden;
         }
 
         .music-player audio {
@@ -112,18 +118,14 @@
             margin-top: 20px;
         }
 
-        /* Styling Lyrics Box on the Left */
+        /* Styling Lyrics Box */
         .lyrics-container {
-            position: absolute;
-            top: 20px;
-            left: -200px;  /* Positioned on the left side of the music player */
             width: 200px;
-            height: 100%;
-            overflow-y: auto;
             background-color: var(--secondary-dark);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            margin-left: 20px;
+            overflow-y: auto;
         }
 
         .lyrics {
@@ -134,94 +136,92 @@
             word-wrap: break-word;
         }
 
-        .highlight {
-            color: var(--primary-red);
-            font-weight: bold;
-        }
-
     </style>
 </head>
 <body>
-    <div class="music-player">
-        <!-- Audio Player -->
-        <audio id="audioPlayer" controls>
-            <source src="/gataonly.mp3" type="audio/mp4">
-            Your browser does not support the audio element.
-        </audio>
-        
-        <!-- Song Info -->
-        <div class="song-info">
-            <h3 id="songName">Gata Only</h3>
-            <small id="artistName">Artis FloyyMenor, Cris Mj</small>
-        </div>
-
-        <!-- Progress Bar -->
-        <div class="progress-bar-container">
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
+    <div class="music-player-container">
+        <!-- Lyrics Container -->
+        <div class="lyrics-container">
+            <div class="lyrics" id="lyrics">
+                Mami, te siento lejo', dime dónde estás<br>
+                Te quiero chingar, te voy a raptar<br>
+                Déjate llevar y apaga el celular<br>
+                Que si estás conmigo no te va a pasar na'<br>
+                Solo déjate llevar<br>
+                'Tate atenta a la fuga<br>
+                Si yo quiero contigo y tú quiere' conmigo<br>
+                Dime si se da (brr)<br>
+                Ba-ba-baby, dale, ponte pa' mí, follow me<br>
+                Tú ere', like, for me y yo 'toy pa' ti<br>
+                Gata, tú está' only, mándame tu ubi<br>
+                Mueve los cachete' al ritmo del TikTok<br>
+                Conmigo esa gata se escapó<br>
+                Y en su casa nadie lo notó<br>
+                Que conmigo la baby esta noche la pasó cabrón<br>
+                Ga-ga-gata, pon el celu en modo avión<br>
+                Tú mi loca y yo tu locotrón<br>
+                Tú te pone' pa' mí<br>
+                Y yo por ti me tiro to'a la misión<br>
+                Mami, te siento lejo', dime dónde estás<br>
+                Te quiero chingar, te voy a raptar<br>
+                Déjate llevar y apaga el celular<br>
+                Que si estás conmigo no te va a pasar na'<br>
+                Solo déjate llevar<br>
+                'Tate atenta a la fuga<br>
+                Si yo quiero contigo y tú quiere' conmigo<br>
+                Dime si se da<br>
+                A-a-así que trépate, actívate<br>
+                Acicálate, que te quiero ver<br>
+                Te paso a recoger, te hago mi mujer<br>
+                Te hago mi mujer, te hago mi mujer<br>
+                Esta noche la pasamo' bien<br>
+                Conmigo no te quieren ver<br>
+                Dime qué e' lo que quiere' hacer<br>
+                Gata, yo te voy a romper<br>
+                Esta noche la pasamo' bien<br>
+                Conmigo no te quieren ver<br>
+                Dime qué e' lo que quiere' hacer<br>
+                (Gata, yo te voy a romper)<br>
+                After, vamono' pa'l after, brr<br>
+                Ey, ey, ya tú sabe' quiénes somo'<br>
+                FloyyMenor<br>
+                Y en los controle' BigCvyu, dame lu', pu-pu-pu<br>
+                Pu-pu-pu, brr<br>
             </div>
         </div>
 
-        <!-- Controls -->
-        <div class="controls">
-            <button id="playPauseBtn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
-                    <path id="playPauseIcon" d="M8 5v14l11-7z"/>
-                </svg>
-            </button>
-        </div>
+        <!-- Music Player -->
+        <div class="music-player">
+            <!-- Audio Player -->
+            <audio id="audioPlayer" controls>
+                <source src="/gataonly.mp3" type="audio/mp4">
+                Your browser does not support the audio element.
+            </audio>
+            
+            <!-- Song Info -->
+            <div class="song-info">
+                <h3 id="songName">Gata Only</h3>
+                <small id="artistName">Artis FloyyMenor, Cris Mj</small>
+            </div>
 
-        <!-- Logo Image -->
-        <img src="/gataonly.jpeg" alt="Gata Only Logo">
-    </div>
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
 
-    <!-- Lyrics Container on the left -->
-    <div class="lyrics-container">
-        <div class="lyrics" id="lyrics">
-            Mami, te siento lejo', dime dónde estás<br>
-            Te quiero chingar, te voy a raptar<br>
-            Déjate llevar y apaga el celular<br>
-            Que si estás conmigo no te va a pasar na'<br>
-            Solo déjate llevar<br>
-            'Tate atenta a la fuga<br>
-            Si yo quiero contigo y tú quiere' conmigo<br>
-            Dime si se da (brr)<br>
-            Ba-ba-baby, dale, ponte pa' mí, follow me<br>
-            Tú ere', like, for me y yo 'toy pa' ti<br>
-            Gata, tú está' only, mándame tu ubi<br>
-            Mueve los cachete' al ritmo del TikTok<br>
-            Conmigo esa gata se escapó<br>
-            Y en su casa nadie lo notó<br>
-            Que conmigo la baby esta noche la pasó cabrón<br>
-            Ga-ga-gata, pon el celu en modo avión<br>
-            Tú mi loca y yo tu locotrón<br>
-            Tú te pone' pa' mí<br>
-            Y yo por ti me tiro to'a la misión<br>
-            Mami, te siento lejo', dime dónde estás<br>
-            Te quiero chingar, te voy a raptar<br>
-            Déjate llevar y apaga el celular<br>
-            Que si estás conmigo no te va a pasar na'<br>
-            Solo déjate llevar<br>
-            'Tate atenta a la fuga<br>
-            Si yo quiero contigo y tú quiere' conmigo<br>
-            Dime si se da<br>
-            A-a-así que trépate, actívate<br>
-            Acicálate, que te quiero ver<br>
-            Te paso a recoger, te hago mi mujer<br>
-            Te hago mi mujer, te hago mi mujer<br>
-            Esta noche la pasamo' bien<br>
-            Conmigo no te quieren ver<br>
-            Dime qué e' lo que quiere' hacer<br>
-            Gata, yo te voy a romper<br>
-            Esta noche la pasamo' bien<br>
-            Conmigo no te quieren ver<br>
-            Dime qué e' lo que quiere' hacer<br>
-            (Gata, yo te voy a romper)<br>
-            After, vamono' pa'l after, brr<br>
-            Ey, ey, ya tú sabe' quiénes somo'<br>
-            FloyyMenor<br>
-            Y en los controle' BigCvyu, dame lu', pu-pu-pu<br>
-            Pu-pu-pu, brr<br>
+            <!-- Controls -->
+            <div class="controls">
+                <button id="playPauseBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+                        <path id="playPauseIcon" d="M8 5v14l11-7z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Logo Image -->
+            <img src="/gataonly.jpeg" alt="Gata Only Logo">
         </div>
     </div>
 
@@ -252,6 +252,4 @@
                 playPauseIcon.setAttribute('d', 'M6 19H5V5h1zm12 0h-1V5h1z');  // Change icon to play
             }
         });
-    </script>
-</body>
-</html>
+    </script
