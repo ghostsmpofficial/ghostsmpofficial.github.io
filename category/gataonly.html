@@ -28,13 +28,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             overflow: hidden;
         }
 
         .music-player-container {
             display: flex;
+            flex-direction: row;
             background-color: var(--dark-bg);
             border-radius: 25px;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
@@ -155,6 +156,7 @@
             opacity: 0.8;
             transition: opacity 0.3s;
             text-align: center;
+            cursor: pointer;
         }
 
         .lyrics:hover {
@@ -164,6 +166,34 @@
         .current-line {
             color: var(--primary-red);
             font-weight: bold;
+        }
+
+        .switch-lyrics {
+            color: var(--primary-red);
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .music-player-container {
+                flex-direction: column;
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                max-width: none;
+            }
+
+            .music-player, .lyrics-container {
+                width: 100%;
+                max-height: 50%;
+            }
+
+            .lyrics-container {
+                border-left: none;
+                border-top: 2px solid var(--primary-red);
+            }
         }
     </style>
 </head>
@@ -177,7 +207,7 @@
                 <small>FloyyMenor, Cris Mj</small>
             </div>
 
-            <audio id="audioPlayer" controls>
+            <audio id="audioPlayer">
                 <source src="/gataonly.mp3" type="audio/mp4">
             </audio>
 
@@ -213,7 +243,8 @@
                 Tú ere', like, for me y yo 'toy pa' ti
                 Gata, tú está' only, mándame tu ubi
                 Mueve los cachete' al ritmo del TikTok
-
+            </div>
+            <div class="switch-lyrics" id="switchLyrics">
                 [Sisa lirik tersisa...]
             </div>
         </div>
@@ -227,6 +258,40 @@
         const playPauseIcon = document.getElementById('playPauseIcon');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
+        const lyrics = document.getElementById('lyrics');
+        const switchLyrics = document.getElementById('switchLyrics');
+
+        const trackList = [
+            '/gataonly.mp3',
+            // Add more tracks here if needed
+        ];
+        let currentTrackIndex = 0;
+
+        const lyricsList = [
+            `Mami, te siento lejo', dime dónde estás
+Te quiero chingar, te voy a raptar
+Déjate llevar y apaga el celular
+Que si estás conmigo no te va a pasar na'
+Solo déjate llevar
+'Tate atenta a la fuga
+Si yo quiero contigo y tú quiere' conmigo
+Dime si se da (brr)
+
+Ba-ba-baby, dale, ponte pa' mí, follow me
+Tú ere', like, for me y yo 'toy pa' ti
+Gata, tú está' only, mándame tu ubi
+Mueve los cachete' al ritmo del TikTok`,
+            `Mami, cuando quiera', tú no ta' pa' na'
+Mis 300 km por hora pa' que tú no pasa'
+Tú ere' bien clara, yo te lo aclar'
+Contigo no hay na', tú ta' pa' mo'a'
+
+Gata only, baby, ponte pa' mí
+Ese culo tuyo, ahora es pa' mí
+Tú ere' pa' lo sucio, tú ere' un thriller
+I'm the king, tú ere' mi whatever`
+        ];
+        let currentLyricsIndex = 0;
 
         function togglePlayPause() {
             if (audioPlayer.paused) {
@@ -252,23 +317,45 @@
             audioPlayer.currentTime = percentage * audioPlayer.duration;
         }
 
+        function playNextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % trackList.length;
+            audioPlayer.src = trackList[currentTrackIndex];
+            audioPlayer.play();
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        }
+
+        function playPreviousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + trackList.length) % trackList.length;
+            audioPlayer.src = trackList[currentTrackIndex];
+            audioPlayer.play();
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        }
+
+        function switchLyricsHandler() {
+            currentLyricsIndex = (currentLyricsIndex + 1) % lyricsList.length;
+            lyrics.textContent = lyricsList[currentLyricsIndex];
+            
+            if (currentLyricsIndex === 0) {
+                switchLyrics.textContent = '[Sisa lirik tersisa...]';
+            } else {
+                switchLyrics.textContent = '[Kembali ke lirik pertama...]';
+            }
+        }
+
         playPauseBtn.addEventListener('click', togglePlayPause);
         audioPlayer.addEventListener('timeupdate', updateProgressBar);
         progressContainer.addEventListener('click', setProgress);
+        switchLyrics.addEventListener('click', switchLyricsHandler);
 
-        prevBtn.addEventListener('click', () => {
-            // Implementasi fungsi tombol sebelumnya jika diperlukan
-            console.log('Previous track');
-        });
-
-        nextBtn.addEventListener('click', () => {
-            // Implementasi fungsi tombol selanjutnya jika diperlukan
-            console.log('Next track');
-        });
+        nextBtn.addEventListener('click', playNextTrack);
+        prevBtn.addEventListener('click', playPreviousTrack);
 
         audioPlayer.addEventListener('ended', () => {
             playPauseIcon.classList.remove('fa-pause');
             playPauseIcon.classList.add('fa-play');
+            playNextTrack();
         });
     </script>
 
