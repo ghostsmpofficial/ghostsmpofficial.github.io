@@ -550,9 +550,6 @@
             closePopup('flashPopup');
         }
 
-        // Memulai kamera saat halaman dimuat
-        startCamera();
-
         // Tutup popup jika mengklik di luar
         window.onclick = function(event) {
             const popups = document.querySelectorAll('.popup');
@@ -562,6 +559,10 @@
                 }
             });
         }
+
+         // Memulai kamera saat halaman dimuat
+        startCamera();
+        
     </script>
 </body>
 </html>
