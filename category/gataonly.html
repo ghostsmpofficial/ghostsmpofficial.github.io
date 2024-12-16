@@ -28,13 +28,14 @@
         .music-player {
             background-color: var(--secondary-dark);
             padding: 20px;
-            width: 400px;
+            width: 500px;
             border-radius: 20px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
+            overflow: hidden;
         }
 
         .music-player audio {
@@ -111,13 +112,26 @@
             margin-top: 20px;
         }
 
+        /* Styling Lyrics Box on the Left */
+        .lyrics-container {
+            position: absolute;
+            top: 20px;
+            left: -200px;  /* Positioned on the left side of the music player */
+            width: 200px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: var(--secondary-dark);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 4px 0 10px rgba(0, 0, 0, 0.4);
+        }
+
         .lyrics {
             color: var(--text-light);
             font-size: 16px;
-            margin-top: 20px;
-            text-align: center;
             line-height: 1.6;
             white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .highlight {
@@ -151,20 +165,64 @@
         <!-- Controls -->
         <div class="controls">
             <button id="playPauseBtn">
-                <!-- SVG Play/Pause Button -->
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
                     <path id="playPauseIcon" d="M8 5v14l11-7z"/>
                 </svg>
             </button>
         </div>
 
-        <!-- Lyrics -->
-        <div class="lyrics" id="lyrics">
-            <!-- Lirik akan muncul di sini -->
-        </div>
-
         <!-- Logo Image -->
         <img src="/gataonly.jpeg" alt="Gata Only Logo">
+    </div>
+
+    <!-- Lyrics Container on the left -->
+    <div class="lyrics-container">
+        <div class="lyrics" id="lyrics">
+            Mami, te siento lejo', dime dónde estás<br>
+            Te quiero chingar, te voy a raptar<br>
+            Déjate llevar y apaga el celular<br>
+            Que si estás conmigo no te va a pasar na'<br>
+            Solo déjate llevar<br>
+            'Tate atenta a la fuga<br>
+            Si yo quiero contigo y tú quiere' conmigo<br>
+            Dime si se da (brr)<br>
+            Ba-ba-baby, dale, ponte pa' mí, follow me<br>
+            Tú ere', like, for me y yo 'toy pa' ti<br>
+            Gata, tú está' only, mándame tu ubi<br>
+            Mueve los cachete' al ritmo del TikTok<br>
+            Conmigo esa gata se escapó<br>
+            Y en su casa nadie lo notó<br>
+            Que conmigo la baby esta noche la pasó cabrón<br>
+            Ga-ga-gata, pon el celu en modo avión<br>
+            Tú mi loca y yo tu locotrón<br>
+            Tú te pone' pa' mí<br>
+            Y yo por ti me tiro to'a la misión<br>
+            Mami, te siento lejo', dime dónde estás<br>
+            Te quiero chingar, te voy a raptar<br>
+            Déjate llevar y apaga el celular<br>
+            Que si estás conmigo no te va a pasar na'<br>
+            Solo déjate llevar<br>
+            'Tate atenta a la fuga<br>
+            Si yo quiero contigo y tú quiere' conmigo<br>
+            Dime si se da<br>
+            A-a-así que trépate, actívate<br>
+            Acicálate, que te quiero ver<br>
+            Te paso a recoger, te hago mi mujer<br>
+            Te hago mi mujer, te hago mi mujer<br>
+            Esta noche la pasamo' bien<br>
+            Conmigo no te quieren ver<br>
+            Dime qué e' lo que quiere' hacer<br>
+            Gata, yo te voy a romper<br>
+            Esta noche la pasamo' bien<br>
+            Conmigo no te quieren ver<br>
+            Dime qué e' lo que quiere' hacer<br>
+            (Gata, yo te voy a romper)<br>
+            After, vamono' pa'l after, brr<br>
+            Ey, ey, ya tú sabe' quiénes somo'<br>
+            FloyyMenor<br>
+            Y en los controle' BigCvyu, dame lu', pu-pu-pu<br>
+            Pu-pu-pu, brr<br>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -174,67 +232,7 @@
         const audioPlayer = document.getElementById('audioPlayer');
         const progressBar = document.getElementById('progress');
         const playPauseBtn = document.getElementById('playPauseBtn');
-        const lyricsElement = document.getElementById('lyrics');
         const playPauseIcon = document.getElementById('playPauseIcon');
-
-        // Data lirik (Tanpa waktu tertentu)
-        const song = {
-            name: 'Gata Only',
-            artist: 'Artis FloyyMenor, Cris Mj',
-            lyrics: `
-                Mami, te siento lejo', dime dónde estás
-Te quiero chingar, te voy a raptar
-Déjate llevar y apaga el celular
-Que si estás conmigo no te va a pasar na'
-Solo déjate llevar
-'Tate atenta a la fuga
-Si yo quiero contigo y tú quiere' conmigo
-Dime si se da (brr)
-Ba-ba-baby, dale, ponte pa' mí, follow me
-Tú ere', like, for me y yo 'toy pa' ti
-Gata, tú está' only, mándame tu ubi
-Mueve los cachete' al ritmo del TikTok
-Conmigo esa gata se escapó
-Y en su casa nadie lo notó
-Que conmigo la baby esta noche la pasó cabrón
-Ga-ga-gata, pon el celu en modo avión
-Tú mi loca y yo tu locotrón
-Tú te pone' pa' mí
-Y yo por ti me tiro to'a la misión
-Mami, te siento lejo', dime dónde estás
-Te quiero chingar, te voy a raptar
-Déjate llevar y apaga el celular
-Que si estás conmigo no te va a pasar na'
-Solo déjate llevar
-'Tate atenta a la fuga
-Si yo quiero contigo y tú quiere' conmigo
-Dime si se da
-A-a-así que trépate, actívate
-Acicálate, que te quiero ver
-Te paso a recoger, te hago mi mujer
-Te hago mi mujer, te hago mi mujer
-Esta noche la pasamo' bien
-Conmigo no te quieren ver
-Dime qué e' lo que quiere' hacer
-Gata, yo te voy a romper
-Esta noche la pasamo' bien
-Conmigo no te quieren ver
-Dime qué e' lo que quiere' hacer
-(Gata, yo te voy a romper)
-After, vamono' pa'l after, brr
-Ey, ey, ya tú sabe' quiénes somo'
-FloyyMenor
-Y en los controle' BigCvyu, dame lu', pu-pu-pu
-Pu-pu-pu, brr
-            `
-        };
-
-        // Mengupdate elemen dengan informasi lagu
-        document.getElementById('songName').textContent = song.name;
-        document.getElementById('artistName').textContent = song.artist;
-
-        // Menampilkan seluruh lirik tanpa sinkronisasi
-        lyricsElement.textContent = song.lyrics;
 
         // Mengupdate progress bar
         function updateProgressBar() {
@@ -248,16 +246,11 @@ Pu-pu-pu, brr
         playPauseBtn.addEventListener('click', function () {
             if (audioPlayer.paused) {
                 audioPlayer.play();
-                playPauseIcon.setAttribute('d', 'M8 5v14l11-7z'); // Ubah ikon ke pause
+                playPauseIcon.setAttribute('d', 'M8 5v14l11-7z');  // Change icon to pause
             } else {
                 audioPlayer.pause();
-                playPauseIcon.setAttribute('d', 'M6 19h12V5H6v14z'); // Ubah ikon ke play
+                playPauseIcon.setAttribute('d', 'M6 19H5V5h1zm12 0h-1V5h1z');  // Change icon to play
             }
-        });
-
-        // Update progress bar pertama kali saat audio siap
-        audioPlayer.addEventListener('play', function () {
-            setInterval(updateProgressBar, 1000); // Memperbarui progress setiap detik
         });
     </script>
 </body>
