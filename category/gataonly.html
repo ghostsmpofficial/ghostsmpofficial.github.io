@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Music Player - Gata Only</title>
+    <title>Gata Only Music Player</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -25,44 +25,45 @@
             background-color: var(--dark-bg);
             color: var(--text-light);
             font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: var(--secondary-dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+        }
+
+        .navbar-brand {
+            color: var(--text-light);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .lyrics-progress {
+            color: var(--primary-red);
+            font-size: 0.8rem;
+            cursor: pointer;
         }
 
         .music-player-container {
             display: flex;
-            flex-direction: row;
-            background-color: var(--dark-bg);
-            border-radius: 25px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            max-width: 900px;
-            width: 90%;
+            flex-direction: column;
+            height: calc(100vh - 50px);
         }
 
         .music-player {
             background-color: var(--secondary-dark);
-            padding: 30px;
-            width: 50%;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
             position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .music-player::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary-red), #000);
         }
 
         .music-player img {
@@ -75,28 +76,21 @@
             border: 4px solid var(--primary-red);
         }
 
-        .music-player .song-info {
+        .song-info {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
-        .music-player .song-info h3 {
+        .song-info h3 {
             margin: 0;
             font-weight: bold;
             color: var(--text-light);
-            font-size: 1.8rem;
-            letter-spacing: -0.5px;
+            font-size: 1.5rem;
         }
 
-        .music-player .song-info small {
+        .song-info small {
             color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        .music-player audio {
-            width: 100%;
-            margin-bottom: 20px;
-            accent-color: var(--primary-red);
+            font-size: 14px;
         }
 
         .progress-container {
@@ -104,7 +98,7 @@
             background-color: var(--dark-bg);
             height: 6px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             cursor: pointer;
         }
 
@@ -120,7 +114,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 30px;
+            width: 100%;
+            padding: 0 20px;
         }
 
         .controls button {
@@ -131,6 +127,12 @@
             cursor: pointer;
             transition: all 0.3s ease;
             opacity: 0.7;
+            padding: 10px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .controls button:hover {
@@ -140,64 +142,52 @@
         }
 
         .lyrics-container {
-            background-color: var(--secondary-dark);
-            width: 50%;
-            padding: 30px;
+            background-color: var(--dark-bg);
+            padding: 10px 15px;
+            max-height: 200px;
             overflow-y: auto;
-            border-left: 2px solid var(--primary-red);
-            max-height: 600px;
+            text-align: center;
         }
 
         .lyrics {
-            color: var(--text-light);
-            font-size: 16px;
-            line-height: 2;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
             white-space: pre-wrap;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-            text-align: center;
-            cursor: pointer;
         }
 
-        .lyrics:hover {
-            opacity: 1;
-        }
-
-        .current-line {
-            color: var(--primary-red);
-            font-weight: bold;
-        }
-
-        .switch-lyrics {
-            color: var(--primary-red);
-            font-weight: bold;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        @media (max-width: 768px) {
+        @media (min-width: 769px) {
             .music-player-container {
-                flex-direction: column;
-                width: 100%;
+                flex-direction: row;
+                max-width: 900px;
+                margin: 0 auto;
                 height: 100vh;
-                border-radius: 0;
-                max-width: none;
             }
 
-            .music-player, .lyrics-container {
-                width: 100%;
-                max-height: 50%;
+            .music-player {
+                width: 60%;
+                border-right: 2px solid var(--primary-red);
             }
 
             .lyrics-container {
-                border-left: none;
-                border-top: 2px solid var(--primary-red);
+                width: 40%;
+                max-height: 100%;
+                overflow-y: auto;
+                padding: 20px;
+            }
+
+            .lyrics {
+                font-size: 16px;
             }
         }
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <div class="navbar-brand">Gata Only</div>
+        <div class="lyrics-progress" id="lyricsProgress">[Sisa lirik tersisa...]</div>
+    </nav>
+
     <div class="music-player-container">
         <div class="music-player">
             <img src="/gataonly.jpeg" alt="Gata Only Cover">
@@ -216,13 +206,13 @@
             </div>
 
             <div class="controls">
-                <button id="prevBtn">
+                <button id="prevBtn" ontouchstart="" ontouchend="">
                     <i class="fas fa-step-backward"></i>
                 </button>
-                <button id="playPauseBtn">
+                <button id="playPauseBtn" ontouchstart="" ontouchend="">
                     <i class="fas fa-play" id="playPauseIcon"></i>
                 </button>
-                <button id="nextBtn">
+                <button id="nextBtn" ontouchstart="" ontouchend="">
                     <i class="fas fa-step-forward"></i>
                 </button>
             </div>
@@ -238,14 +228,6 @@
                 'Tate atenta a la fuga
                 Si yo quiero contigo y tú quiere' conmigo
                 Dime si se da (brr)
-
-                Ba-ba-baby, dale, ponte pa' mí, follow me
-                Tú ere', like, for me y yo 'toy pa' ti
-                Gata, tú está' only, mándame tu ubi
-                Mueve los cachete' al ritmo del TikTok
-            </div>
-            <div class="switch-lyrics" id="switchLyrics">
-                [Sisa lirik tersisa...]
             </div>
         </div>
     </div>
@@ -259,13 +241,7 @@
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const lyrics = document.getElementById('lyrics');
-        const switchLyrics = document.getElementById('switchLyrics');
-
-        const trackList = [
-            '/gataonly.mp3',
-            // Add more tracks here if needed
-        ];
-        let currentTrackIndex = 0;
+        const lyricsProgress = document.getElementById('lyricsProgress');
 
         const lyricsList = [
             `Mami, te siento lejo', dime dónde estás
@@ -275,9 +251,8 @@ Que si estás conmigo no te va a pasar na'
 Solo déjate llevar
 'Tate atenta a la fuga
 Si yo quiero contigo y tú quiere' conmigo
-Dime si se da (brr)
-
-Ba-ba-baby, dale, ponte pa' mí, follow me
+Dime si se da (brr)`,
+            `Ba-ba-baby, dale, ponte pa' mí, follow me
 Tú ere', like, for me y yo 'toy pa' ti
 Gata, tú está' only, mándame tu ubi
 Mueve los cachete' al ritmo del TikTok`,
@@ -291,6 +266,7 @@ Ese culo tuyo, ahora es pa' mí
 Tú ere' pa' lo sucio, tú ere' un thriller
 I'm the king, tú ere' mi whatever`
         ];
+
         let currentLyricsIndex = 0;
 
         function togglePlayPause() {
@@ -317,46 +293,44 @@ I'm the king, tú ere' mi whatever`
             audioPlayer.currentTime = percentage * audioPlayer.duration;
         }
 
-        function playNextTrack() {
-            currentTrackIndex = (currentTrackIndex + 1) % trackList.length;
-            audioPlayer.src = trackList[currentTrackIndex];
-            audioPlayer.play();
-            playPauseIcon.classList.remove('fa-play');
-            playPauseIcon.classList.add('fa-pause');
-        }
-
-        function playPreviousTrack() {
-            currentTrackIndex = (currentTrackIndex - 1 + trackList.length) % trackList.length;
-            audioPlayer.src = trackList[currentTrackIndex];
-            audioPlayer.play();
-            playPauseIcon.classList.remove('fa-play');
-            playPauseIcon.classList.add('fa-pause');
-        }
-
-        function switchLyricsHandler() {
+        function switchLyrics() {
             currentLyricsIndex = (currentLyricsIndex + 1) % lyricsList.length;
             lyrics.textContent = lyricsList[currentLyricsIndex];
-            
-            if (currentLyricsIndex === 0) {
-                switchLyrics.textContent = '[Sisa lirik tersisa...]';
+
+            if (currentLyricsIndex === lyricsList.length - 1) {
+                lyricsProgress.textContent = '[Kembali ke lirik pertama...]';
             } else {
-                switchLyrics.textContent = '[Kembali ke lirik pertama...]';
+                lyricsProgress.textContent = '[Sisa lirik tersisa...]';
             }
         }
 
+        // Event Listeners
         playPauseBtn.addEventListener('click', togglePlayPause);
+        playPauseBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            togglePlayPause();
+        });
+
+        prevBtn.addEventListener('click', () => console.log('Previous track'));
+        prevBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            console.log('Previous track');
+        });
+
+        nextBtn.addEventListener('click', () => console.log('Next track'));
+        nextBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            console.log('Next track');
+        });
+
+        lyricsProgress.addEventListener('click', switchLyrics);
+        lyricsProgress.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            switchLyrics();
+        });
+
         audioPlayer.addEventListener('timeupdate', updateProgressBar);
         progressContainer.addEventListener('click', setProgress);
-        switchLyrics.addEventListener('click', switchLyricsHandler);
-
-        nextBtn.addEventListener('click', playNextTrack);
-        prevBtn.addEventListener('click', playPreviousTrack);
-
-        audioPlayer.addEventListener('ended', () => {
-            playPauseIcon.classList.remove('fa-pause');
-            playPauseIcon.classList.add('fa-play');
-            playNextTrack();
-        });
     </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
