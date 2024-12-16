@@ -125,7 +125,8 @@
             padding: 20px;
             border-radius: 20px;
             margin-left: 20px;
-            overflow-y: auto;
+            max-height: 300px; /* Set maximum height */
+            overflow-y: auto; /* Enable scrolling if the content exceeds the max height */
         }
 
         .lyrics {
@@ -252,4 +253,6 @@
                 playPauseIcon.setAttribute('d', 'M6 19H5V5h1zm12 0h-1V5h1z');  // Change icon to play
             }
         });
-    </script
+    </script>
+</body>
+</html>
