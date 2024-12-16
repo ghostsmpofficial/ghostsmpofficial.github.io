@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player with YouTube and Lyrics</title>
+    <title>Music Player with Lyrics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
@@ -36,9 +36,9 @@
             align-items: center;
         }
 
-        .music-player #player {
+        .music-player audio {
             width: 100%;
-            height: 250px;
+            height: 50px;
             margin-bottom: 20px;
         }
 
@@ -113,11 +113,15 @@
 </head>
 <body>
     <div class="music-player">
-        <!-- YouTube Player -->
-        <div id="player"></div>
+        <!-- Audio Player -->
+        <audio id="audioPlayer" controls>
+            <source src="music/gataonly.mp4" type="audio/mp4">
+            Your browser does not support the audio element.
+        </audio>
         
         <!-- Song Info -->
         <div class="song-info">
+            <img src="music/gataonly.jpg" alt="Gata Only" class="img-fluid mb-3" style="width: 100px; height: 100px; border-radius: 10px;">
             <h3 id="songName">Gata Only</h3>
             <small id="artistName">Artis FloyyMenor, Cris Mj</small>
         </div>
@@ -131,9 +135,7 @@
 
         <!-- Controls -->
         <div class="controls">
-            <button><i class="fas fa-backward"></i></button>
             <button id="playPauseBtn"><i class="fas fa-play"></i></button>
-            <button><i class="fas fa-forward"></i></button>
         </div>
 
         <!-- Lyrics -->
@@ -146,31 +148,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <script>
-        // Inisialisasi YouTube Iframe API
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '250',
-                width: '100%',
-                videoId: '-r687V8yqKY', // ID video YouTube Anda
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
-
-        // Saat player siap
-        function onPlayerReady(event) {
-            event.target.playVideo();
-        }
-
-        // Ketika status pemutaran berubah
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                updateProgressBar();
-            }
-        }
+        const audioPlayer = document.getElementById('audioPlayer');
+        const progressBar = document.getElementById('progress');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const lyricsElement = document.getElementById('lyrics');
 
         // Data lirik dan waktu untuk sinkronisasi
         const song = {
@@ -194,21 +175,19 @@
 
         // Mengupdate progress bar
         function updateProgressBar() {
-            const progressBar = document.getElementById('progress');
-            const duration = player.getDuration();
-            const currentTime = player.getCurrentTime();
+            const duration = audioPlayer.duration;
+            const currentTime = audioPlayer.currentTime;
             const percentage = (currentTime / duration) * 100;
             progressBar.style.width = percentage + '%';
 
             updateLyrics(currentTime);  // Update lyrics setiap detik
-            if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+            if (!audioPlayer.paused) {
                 setTimeout(updateProgressBar, 1000);
             }
         }
 
         // Fungsi untuk memperbarui lirik
         function updateLyrics(currentTime) {
-            const lyricsElement = document.getElementById('lyrics');
             let displayedLyrics = '';
 
             song.lyrics.forEach(lyric => {
@@ -221,24 +200,20 @@
         }
 
         // Tombol Play/Pause
-        document.getElementById('playPauseBtn').addEventListener('click', function () {
-            const icon = this.querySelector('i');
-            if (icon.classList.contains('fa-play')) {
-                icon.classList.remove('fa-play');
-                icon.classList.add('fa-pause');
-                player.playVideo();
+        playPauseBtn.addEventListener('click', function () {
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
             } else {
-                icon.classList.remove('fa-pause');
-                icon.classList.add('fa-play');
-                player.pauseVideo();
+                audioPlayer.pause();
+                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
             }
         });
 
-        // Load YouTube Iframe API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // Update progress bar pertama kali saat audio siap
+        audioPlayer.addEventListener('play', function () {
+            updateProgressBar();
+        });
     </script>
 </body>
 </html>
