@@ -34,12 +34,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
         .music-player audio {
             width: 100%;
             height: 50px;
             margin-bottom: 20px;
+            border-radius: 10px;
+            background-color: var(--dark-bg);
+            border: none;
         }
 
         .music-player .song-info {
@@ -51,6 +55,7 @@
             margin: 0;
             font-weight: bold;
             color: var(--text-light);
+            font-size: 1.5rem;
         }
 
         .music-player .song-info small {
@@ -79,21 +84,31 @@
 
         .music-player .controls {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             width: 100%;
+            position: absolute;
+            bottom: 10px;
         }
 
         .controls button {
             background-color: transparent;
             border: none;
             color: var(--text-light);
-            font-size: 24px;
+            font-size: 30px;
             padding: 10px;
             transition: all 0.3s ease;
         }
 
         .controls button:hover {
             transform: scale(1.2);
+            color: var(--primary-red);
+        }
+
+        .music-player img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-top: 20px;
         }
 
         .lyrics {
@@ -102,6 +117,7 @@
             margin-top: 20px;
             text-align: center;
             line-height: 1.6;
+            white-space: pre-wrap;
         }
 
         .highlight {
@@ -121,7 +137,6 @@
         
         <!-- Song Info -->
         <div class="song-info">
-            <img src="/gataonly.jpeg" alt="Gata Only" class="img-fluid mb-3" style="width: 100px; height: 100px; border-radius: 10px;">
             <h3 id="songName">Gata Only</h3>
             <small id="artistName">Artis FloyyMenor, Cris Mj</small>
         </div>
@@ -135,13 +150,21 @@
 
         <!-- Controls -->
         <div class="controls">
-            <button id="playPauseBtn"><i class="fas fa-play"></i></button>
+            <button id="playPauseBtn">
+                <!-- SVG Play/Pause Button -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
+                    <path id="playPauseIcon" d="M8 5v14l11-7z"/>
+                </svg>
+            </button>
         </div>
 
         <!-- Lyrics -->
         <div class="lyrics" id="lyrics">
             <!-- Lirik akan muncul di sini -->
         </div>
+
+        <!-- Logo Image -->
+        <img src="/gataonly.jpeg" alt="Gata Only Logo">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -152,26 +175,66 @@
         const progressBar = document.getElementById('progress');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const lyricsElement = document.getElementById('lyrics');
+        const playPauseIcon = document.getElementById('playPauseIcon');
 
-        // Data lirik dan waktu untuk sinkronisasi
+        // Data lirik (Tanpa waktu tertentu)
         const song = {
             name: 'Gata Only',
             artist: 'Artis FloyyMenor, Cris Mj',
-            lyrics: [
-                { time: 0, text: "Gata Only, that's what I am" },
-                { time: 5, text: "Running through the night, feeling like a star" },
-                { time: 10, text: "Gata Only, all I ever wanted" },
-                { time: 15, text: "Here I am, and I'm not haunted" },
-                { time: 20, text: "Gata Only, that's what I am" },
-                { time: 25, text: "Running through the night, feeling like a star" },
-                { time: 30, text: "Gata Only, all I ever wanted" },
-                { time: 35, text: "Here I am, and I'm not haunted" }
-            ]
+            lyrics: `
+                Mami, te siento lejo', dime dónde estás
+Te quiero chingar, te voy a raptar
+Déjate llevar y apaga el celular
+Que si estás conmigo no te va a pasar na'
+Solo déjate llevar
+'Tate atenta a la fuga
+Si yo quiero contigo y tú quiere' conmigo
+Dime si se da (brr)
+Ba-ba-baby, dale, ponte pa' mí, follow me
+Tú ere', like, for me y yo 'toy pa' ti
+Gata, tú está' only, mándame tu ubi
+Mueve los cachete' al ritmo del TikTok
+Conmigo esa gata se escapó
+Y en su casa nadie lo notó
+Que conmigo la baby esta noche la pasó cabrón
+Ga-ga-gata, pon el celu en modo avión
+Tú mi loca y yo tu locotrón
+Tú te pone' pa' mí
+Y yo por ti me tiro to'a la misión
+Mami, te siento lejo', dime dónde estás
+Te quiero chingar, te voy a raptar
+Déjate llevar y apaga el celular
+Que si estás conmigo no te va a pasar na'
+Solo déjate llevar
+'Tate atenta a la fuga
+Si yo quiero contigo y tú quiere' conmigo
+Dime si se da
+A-a-así que trépate, actívate
+Acicálate, que te quiero ver
+Te paso a recoger, te hago mi mujer
+Te hago mi mujer, te hago mi mujer
+Esta noche la pasamo' bien
+Conmigo no te quieren ver
+Dime qué e' lo que quiere' hacer
+Gata, yo te voy a romper
+Esta noche la pasamo' bien
+Conmigo no te quieren ver
+Dime qué e' lo que quiere' hacer
+(Gata, yo te voy a romper)
+After, vamono' pa'l after, brr
+Ey, ey, ya tú sabe' quiénes somo'
+FloyyMenor
+Y en los controle' BigCvyu, dame lu', pu-pu-pu
+Pu-pu-pu, brr
+            `
         };
 
         // Mengupdate elemen dengan informasi lagu
         document.getElementById('songName').textContent = song.name;
         document.getElementById('artistName').textContent = song.artist;
+
+        // Menampilkan seluruh lirik tanpa sinkronisasi
+        lyricsElement.textContent = song.lyrics;
 
         // Mengupdate progress bar
         function updateProgressBar() {
@@ -179,40 +242,22 @@
             const currentTime = audioPlayer.currentTime;
             const percentage = (currentTime / duration) * 100;
             progressBar.style.width = percentage + '%';
-
-            updateLyrics(currentTime);  // Update lyrics setiap detik
-            if (!audioPlayer.paused) {
-                setTimeout(updateProgressBar, 1000);
-            }
-        }
-
-        // Fungsi untuk memperbarui lirik
-        function updateLyrics(currentTime) {
-            let displayedLyrics = '';
-
-            song.lyrics.forEach(lyric => {
-                if (currentTime >= lyric.time) {
-                    displayedLyrics += `<p class="${currentTime >= lyric.time && currentTime < (lyric.time + 5) ? 'highlight' : ''}">${lyric.text}</p>`;
-                }
-            });
-
-            lyricsElement.innerHTML = displayedLyrics;
         }
 
         // Tombol Play/Pause
         playPauseBtn.addEventListener('click', function () {
             if (audioPlayer.paused) {
                 audioPlayer.play();
-                playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                playPauseIcon.setAttribute('d', 'M8 5v14l11-7z'); // Ubah ikon ke pause
             } else {
                 audioPlayer.pause();
-                playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+                playPauseIcon.setAttribute('d', 'M6 19h12V5H6v14z'); // Ubah ikon ke play
             }
         });
 
         // Update progress bar pertama kali saat audio siap
         audioPlayer.addEventListener('play', function () {
-            updateProgressBar();
+            setInterval(updateProgressBar, 1000); // Memperbarui progress setiap detik
         });
     </script>
 </body>
