@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghostly Music</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #FF3333;
+            --dark-bg: #121212;
+            --secondary-dark: #1E1E1E;
+            --text-light: #FFFFFF;
+            --text-gray: #B3B3B3;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .modern-card {
+            background-color: var(--secondary-dark);
+            border-radius: 15px;
+            border: none;
+            transition: transform 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: scale(1.03);
+        }
+
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--secondary-dark);
+            border-top: 2px solid var(--primary-red);
+            z-index: 1000;
+        }
+
+        .nav-link {
+            color: var(--text-gray) !important;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link.active, .nav-link:hover {
+            color: var(--primary-red) !important;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            background-color: var(--secondary-dark);
+            border: 2px solid var(--primary-red);
+            color: var(--text-light);
+        }
+
+        .viral-song-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .viral-song-item {
+            text-align: center;
+            background-color: var(--secondary-dark);
+            border-radius: 15px;
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .viral-song-item:hover {
+            transform: scale(1.05);
+        }
+
+        .viral-song-item img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-red);
+        }
+
+        .song-track {
+            background-color: var(--secondary-dark);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .song-track:hover {
+            background-color: rgba(255, 51, 51, 0.1);
+        }
+
+        .premium-card {
+            background: linear-gradient(135deg, var(--primary-red), #8B0000);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-red);
+            border-color: var(--primary-red);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #FF5555;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid px-0">
+        <!-- Konten Utama -->
+        <div id="homeScreen">
+            <div class="p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="m-0">RedWave Music</h2>
+                    <i class="fas fa-bell text-light"></i>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container mb-4">
+                    <input type="text" class="form-control search-input" placeholder="Cari lagu, artis...">
+                    <i class="fas fa-search position-absolute" style="top: 12px; right: 15px; color: var(--primary-red);"></i>
+                </div>
+
+                <!-- Lagu Viral -->
+                <h4 class="mb-3">Lagu Viral</h4>
+                <div class="viral-song-grid mb-4">
+                    <div class="viral-song-item">
+                        <img src="https://via.placeholder.com/100" alt="Lagu Viral 1">
+                        <p class="mt-2 mb-0 text-light">Lagu Viral 1</p>
+                        <small class="text-muted">Artist Name</small>
+                    </div>
+                    <div class="viral-song-item">
+                        <img src="https://via.placeholder.com/100" alt="Lagu Viral 2">
+                        <p class="mt-2 mb-0 text-light">Lagu Viral 2</p>
+                        <small class="text-muted">Artist Name</small>
+                    </div>
+                    <div class="viral-song-item">
+                        <img src="https://via.placeholder.com/100" alt="Lagu Viral 3">
+                        <p class="mt-2 mb-0 text-light">Lagu Viral 3</p>
+                        <small class="text-muted">Artist Name</small>
+                    </div>
+                </div>
+
+                <!-- Top Lagu -->
+                <h4 class="mb-3">Top Lagu</h4>
+                <div class="song-track">
+                    <img src="https://via.placeholder.com/50" class="rounded me-3" style="width: 50px; height: 50px;">
+                    <div class="flex-grow-1">
+                        <h6 class="m-0 text-light">Nama Lagu</h6>
+                        <small class="text-muted">Nama Artis</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                <div class="song-track">
+                    <img src="https://via.placeholder.com/50" class="rounded me-3" style="width: 50px; height: 50px;">
+                    <div class="flex-grow-1">
+                        <h6 class="m-0 text-light">Nama Lagu</h6>
+                        <small class="text-muted">Nama Artis</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium Screen -->
+        <div id="premiumScreen" style="display: none;" class="p-4">
+            <h2 class="mb-4">Premium Membership</h2>
+            <div class="card premium-card mb-3">
+                <div class="card-body">
+                    <h4>Basic Plan</h4>
+                    <h2 class="mb-3">Rp 50.000/bulan</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-light me-2"></i>
+                            Bebas Iklan
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-light me-2"></i>
+                            Skip Lagu Unlimited
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary w-100 mt-3">Pilih Paket</button>
+                </div>
+            </div>
+
+            <div class="card premium-card">
+                <div class="card-body">
+                    <h4>Pro Plan</h4>
+                    <h2 class="mb-3">Rp 100.000/bulan</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-light me-2"></i>
+                            Kualitas Audio Tinggi
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-check-circle text-light me-2"></i>
+                            Download Offline
+                        </li>
+                    </ul>
+                    <button class="btn btn-primary w-100 mt-3">Pilih Paket</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Screen -->
+        <div id="accountScreen" style="display: none;" class="p-4 text-center">
+            <div id="loginSection">
+                <h2 class="mb-4">Login ke RedWave</h2>
+                <button class="btn btn-danger btn-lg w-100 mb-3">
+                    <i class="fab fa-google me-2"></i>Login dengan Google
+                </button>
+            </div>
+
+            <div id="userProfileSection" style="display: none;">
+                <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                <h3>Nama Pengguna</h3>
+                <p class="text-muted">email@example.com</p>
+                <button class="btn btn-outline-danger mt-3">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-navbar navbar navbar-dark">
+        <div class="container justify-content-center">
+            <ul class="nav w-100 justify-content-around">
+                <li class="nav-item text-center">
+                    <a href="#" class="nav-link active" onclick="showScreen('home')">
+                        <i class="fas fa-home fa-lg"></i>
+                        <div class="small mt-1">Home</div>
+                    </a>
+                </li>
+                <li class="nav-item text-center">
+                    <a href="#" class="nav-link" onclick="showScreen('premium')">
+                        <i class="fas fa-star fa-lg"></i>
+                        <div class="small mt-1">Premium</div>
+                    </a>
+                </li>
+                <li class="nav-item text-center">
+                    <a href="#" class="nav-link" onclick="showScreen('account')">
+                        <i class="fas fa-user fa-lg"></i>
+                        <div class="small mt-1">Akun</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script>
+        function showScreen(screen) {
+            // Reset semua navigasi
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Sembunyikan semua layar
+            ['homeScreen', 'premiumScreen', 'accountScreen'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+
+            // Tampilkan layar yang dipilih
+            const screenMap = {
+                'home': 'homeScreen',
+                'premium': 'premiumScreen',
+                'account': 'accountScreen'
+            };
+
+            const activeScreen = document.getElementById(screenMap[screen]);
+            activeScreen.style.display = 'block';
+
+            // Set navigasi aktif
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
