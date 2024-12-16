@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify-like Music Player</title>
+    <title>Music Player with YouTube and Lyrics</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary-red: #1DB954;
+            --primary-red: #FF3333;
             --dark-bg: #121212;
             --secondary-dark: #1E1E1E;
             --text-light: #FFFFFF;
@@ -36,11 +36,9 @@
             align-items: center;
         }
 
-        .music-player img {
-            width: 250px;
+        .music-player #player {
+            width: 100%;
             height: 250px;
-            border-radius: 10px;
-            border: 5px solid var(--primary-red);
             margin-bottom: 20px;
         }
 
@@ -74,7 +72,7 @@
 
         .music-player .progress-bar .progress {
             height: 100%;
-            width: 50%; /* Adjust this dynamically with JS for real-time update */
+            width: 0%; /* Dynamically updated */
             background-color: var(--primary-red);
             border-radius: 5px;
         }
@@ -98,23 +96,36 @@
             transform: scale(1.2);
         }
 
+        .lyrics {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .highlight {
+            color: var(--primary-red);
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
     <div class="music-player">
-        <!-- Album Artwork -->
-        <img src="https://via.placeholder.com/250" alt="Album Artwork">
+        <!-- YouTube Player -->
+        <div id="player"></div>
         
         <!-- Song Info -->
         <div class="song-info">
-            <h3>Nama Lagu</h3>
-            <small>Nama Artis</small>
+            <h3 id="songName">Gata Only</h3>
+            <small id="artistName">Artis FloyyMenor, Cris Mj</small>
         </div>
 
         <!-- Progress Bar -->
         <div class="progress-bar-container">
             <div class="progress-bar">
-                <div class="progress"></div>
+                <div class="progress" id="progress"></div>
             </div>
         </div>
 
@@ -124,22 +135,110 @@
             <button id="playPauseBtn"><i class="fas fa-play"></i></button>
             <button><i class="fas fa-forward"></i></button>
         </div>
+
+        <!-- Lyrics -->
+        <div class="lyrics" id="lyrics">
+            <!-- Lirik akan muncul di sini -->
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <script>
+        // Inisialisasi YouTube Iframe API
+        var player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '250',
+                width: '100%',
+                videoId: '-r687V8yqKY', // ID video YouTube Anda
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        // Saat player siap
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+
+        // Ketika status pemutaran berubah
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PLAYING) {
+                updateProgressBar();
+            }
+        }
+
+        // Data lirik dan waktu untuk sinkronisasi
+        const song = {
+            name: 'Gata Only',
+            artist: 'Artis FloyyMenor, Cris Mj',
+            lyrics: [
+                { time: 0, text: "Gata Only, that's what I am" },
+                { time: 5, text: "Running through the night, feeling like a star" },
+                { time: 10, text: "Gata Only, all I ever wanted" },
+                { time: 15, text: "Here I am, and I'm not haunted" },
+                { time: 20, text: "Gata Only, that's what I am" },
+                { time: 25, text: "Running through the night, feeling like a star" },
+                { time: 30, text: "Gata Only, all I ever wanted" },
+                { time: 35, text: "Here I am, and I'm not haunted" }
+            ]
+        };
+
+        // Mengupdate elemen dengan informasi lagu
+        document.getElementById('songName').textContent = song.name;
+        document.getElementById('artistName').textContent = song.artist;
+
+        // Mengupdate progress bar
+        function updateProgressBar() {
+            const progressBar = document.getElementById('progress');
+            const duration = player.getDuration();
+            const currentTime = player.getCurrentTime();
+            const percentage = (currentTime / duration) * 100;
+            progressBar.style.width = percentage + '%';
+
+            updateLyrics(currentTime);  // Update lyrics setiap detik
+            if (player.getPlayerState() == YT.PlayerState.PLAYING) {
+                setTimeout(updateProgressBar, 1000);
+            }
+        }
+
+        // Fungsi untuk memperbarui lirik
+        function updateLyrics(currentTime) {
+            const lyricsElement = document.getElementById('lyrics');
+            let displayedLyrics = '';
+
+            song.lyrics.forEach(lyric => {
+                if (currentTime >= lyric.time) {
+                    displayedLyrics += `<p class="${currentTime >= lyric.time && currentTime < (lyric.time + 5) ? 'highlight' : ''}">${lyric.text}</p>`;
+                }
+            });
+
+            lyricsElement.innerHTML = displayedLyrics;
+        }
+
+        // Tombol Play/Pause
         document.getElementById('playPauseBtn').addEventListener('click', function () {
             const icon = this.querySelector('i');
             if (icon.classList.contains('fa-play')) {
                 icon.classList.remove('fa-play');
                 icon.classList.add('fa-pause');
+                player.playVideo();
             } else {
                 icon.classList.remove('fa-pause');
                 icon.classList.add('fa-play');
+                player.pauseVideo();
             }
         });
+
+        // Load YouTube Iframe API
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     </script>
 </body>
 </html>
