@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title>GhostSmp - Home</title>
+		<title>GhostSmp - Server Offline</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -11,164 +11,101 @@
 		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
 		<script src="https://kit.fontawesome.com/a1f6a7827b.js" crossorigin="anonymous"></script>
 		<link rel="icon" href="images/logo.png">
-
+		<style>
+			.server-status {
+				background-color: rgba(255, 0, 0, 0.1);
+				border: 2px solid #ff0000;
+				padding: 20px;
+				margin: 20px;
+				border-radius: 10px;
+				text-align: center;
+			}
+			
+			.status-icon {
+				color: #ff0000;
+				font-size: 48px;
+				margin-bottom: 15px;
+			}
+			
+			.maintenance-notice {
+				background-color: rgba(0, 0, 0, 0.7);
+				padding: 20px;
+				border-radius: 5px;
+				margin-top: 20px;
+			}
+		</style>
 	</head>
 	<body class="landing is-preload" oncontextmenu="return false" onselect="return false" ondragstart="return false">
 
 		<!-- Back to top button -->
-      <a id="buttontop"></a>
+		<a id="buttontop"></a>
 
 		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+		<div id="page-wrapper">
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<div style='margin:15px; padding:10px;'>
-							<a href="/"><img src="images/logo.png" alt="logo" id="logo" width="258" height="55"></a>
-						</div>
-						<nav id="nav">
-
-							<ul>
-								<li class="special">
-									<a href="#menu" class="menuToggle"><span>Menu</span></a>
-									<div id="menu">
-										<ul>
-											<li><a style="cursor: pointer;" onClick="window.open('/', '_self')">Home</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('store', '_blank')">Store</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('vote', '_self')" >Vote</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('peraturan', '_self')">Peraturan</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('pencalonan', '_self')">Pencalonan</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('pengumuman', '_self')">Papan pengumuman</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('staff', '_self')">Staff</a></li>
-											<li><a style="cursor: pointer;" onClick="window.open('social', '_self')">Social</a></li>
-										</ul>
-									</div>
-								</li>
-							</ul>
-						</nav>
-					</header>
-
-				<!-- Banner -->
-					<section id="banner">
-						<div class="inner">
-							<!-- <h2>ServerName</h2> -->
-							<ul class="actions">
-								<li><a onclick="copy()" class="button special primary">node.cyberdigitalshop.akashona.cloud:19138</a></li>
-						  	</ul>
-							<ul class="actions special">
-								<li><a href="vote" class="button" target="_self">Vote</a></li>
-								<li><a href="store" class="button" target="_blank">Store</a></li>
-								<li><a href="staff" class="button" target="_self">Staff</a></li>
-							</ul>
-						</div>
-						<br>
-						<a href="#one" class="more scrolly">Gulir Ke bawah</a>
-					</section>
-
-				<!-- One -->
-					<section id="one" class="wrapper style1 special">
-						<div class="inner">
-							<header class="major">
-								<h2>Welcome To GhostSmp</h2>
-								<p>Server Ghost Smp Menyediakan Fitur Unik Loh!</p>
-							</header>
-						</div>
-					</section>
-
-				<!-- Two -->
-					<section id="two" class="wrapper alt style2">
-						<section class="spotlight">
-							<div class="image"><img src="images/pic01.jpg" alt="" /></div><div class="content">
-								<h2>Senjata Legends</h2>
-								<p>Server Ini Menyediakan Senjata Legends Kayak Di Brutal Legends. Senajata Ada 19 pasang.</p>
+			<!-- Header -->
+			<header id="header" class="alt">
+				<div style='margin:15px; padding:10px;'>
+					<a href="/"><img src="images/logo.png" alt="logo" id="logo" width="258" height="55"></a>
+				</div>
+				<nav id="nav">
+					<ul>
+						<li class="special">
+							<a href="#menu" class="menuToggle"><span>Menu</span></a>
+							<div id="menu">
+								<ul>
+									<li><a style="cursor: pointer;" onClick="window.open('/', '_self')">Home</a></li>
+									<li><a style="cursor: pointer;" onClick="window.open('social', '_self')">Social</a></li>
+								</ul>
 							</div>
-						</section>
-						<section class="spotlight">
-							<div class="image"><img src="images/pic02.jpg" alt="" /></div><div class="content">
-								<h2>Lobby</h2>
-								<p>Lobby Server Dengan Tema Kuburan Yang Membuat Suasana Menjadi Menyeramkan</p>
-							</div>
-						</section>
-						<section class="spotlight">
-							<div class="image"><img src="images/pic03.jpg" alt="" /></div><div class="content">
-								<h2>Economy</h2>
-								<p>Server Ini Menyediakan Fitur Economy Juga Dengan Berbagai Fitur Seperti: Rank, Money, Shop, Dan Lain Lain. World Di Dalam Server Ini Menggunakan World Vannila Atau Bawaan.</p>
-							</div>
-						</section>
-					</section>
-
-				<!-- Three -->
-					<section id="three" class="wrapper style3 special">
-						<div class="inner">
-							<header class="major">
-								<h2>Contatc</h2>
-								<p>ANDA SELALU DAPAT MENEMUKAN KAMI</p>
-							</header>
-							<ul class="features">
-								<li class="far fa-paper-plane">
-									<h3 style="font-family: 'Comic Sans MS', arial;">TELEGRAM</h3>
-									<p style="font-family: 'Comic Sans MS', arial;">GABUNG SALURAN TELEGRAM KAMI</p>
-									<button type="button" onClick="window.open('https://t.me/ServerNameChat', '_blank')">CLICK</button>
-								</li>
-								<li class="fab fa-discord">
-									<h3 style="font-family: 'Comic Sans MS', arial;">DISCORD</h3>
-									<P style="font-family: 'Comic Sans MS', arial;">GABUNG GROUP DISCORD KAMI</P>
-									<button type="button" onClick="window.open('discord.html', '_self')">CLICK</button>
-								</li>
-								<li class="fab fa-instagram">
-									<h3 style="font-family: 'Comic Sans MS', arial;">SOCIAL</h3>
-									<P style="font-family: 'Comic Sans MS', arial;">HUBUNGI KAMI DI MEDIA SOSIAL UTAMA KAMI</P>
-									<button type="button" onClick="window.open('social.html', '_self')">CLICK</button>
-								</li>
-							</ul>
-						</div>
-					</section>
-
-				<!-- CTA -->
-					<section id="cta" class="wrapper style4">
-						<div class="inner">
-							<header>
-								<ha2>Hubungi staff</h2>
-							</header>
-							<ul class="actions stacked">
-								<li><a href="mail: ghost.smp.offficial@gmail.com" class="button fit primary">E-MAIL</a></li>
-							</ul>
-						</div>
-					</section>
-
-				<!-- Footer -->
-				<!-- Footer -->
-				<footer id="footer">
-					<ul class="icons">
-						<li><a href="https://t.me/ServerNameChat" target="_blank" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
-						<li><a href="https://discord.gg/p6At8NZ2" target="_blank" class="icon brands fa-discord"><span class="label">Discord</span></a></li>
-						<li><a href="http://tiktok.ServerName.net" target="_blank" class="icon brands fa-tiktok"><span class="label">TikTok</span></a></li>
-						<li><a href="https://www.instagram.com/ServerName_official/" target="_blank" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-						<li><a href="http://youtube.ServerName.net" target="_blank" class="icon brands fa-youtube"><span class="label">YouTube</span></a></li>
-
+						</li>
 					</ul>
-					<ul class="copyright">
-						<li>&copy; GhostSmp 2024 | Semua hak dilindungi undang-undang</li>
-					</ul>
-				</footer>
+				</nav>
+			</header>
 
-			</div>
+			<!-- Banner -->
+			<section id="banner">
+				<div class="inner">
+					<div class="server-status">
+						<i class="fas fa-exclamation-triangle status-icon"></i>
+						<h2>Server Tidak Tersedia</h2>
+						<div class="maintenance-notice">
+							<p>Dengan berat hati kami mengumumkan bahwa GhostSmp telah ditutup secara permanen karena beberapa alasan:</p>
+							<ul style="text-align: left; display: inline-block;">
+								<li>Kurangnya dana untuk mempertahankan infrastruktur server</li>
+								<li>Penurunan jumlah pemain aktif</li>
+								<li>Masalah teknis yang berkelanjutan</li>
+								<li>Keterbatasan waktu tim pengelola untuk maintenance</li>
+							</ul>
+							<p>Kami berterima kasih atas dukungan Anda selama ini!</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Footer -->
+			<footer id="footer">
+				<ul class="icons">
+					<li><a href="https://t.me/ServerNameChat" target="_blank" class="icon brands fa-telegram"><span class="label">Telegram</span></a></li>
+					<li><a href="https://discord.gg/p6At8NZ2" target="_blank" class="icon brands fa-discord"><span class="label">Discord</span></a></li>
+					<li><a href="https://www.instagram.com/ServerName_official/" target="_blank" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+				</ul>
+				<ul class="copyright">
+					<li>&copy; GhostSmp 2024 | Semua hak dilindungi undang-undang</li>
+				</ul>
+			</footer>
+
+		</div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			<script src="assets/js/buttontop.js"></script>
-			<script src="assets/js/clipboard.js"></script>
-			<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-			<script src="https://cdn.jsdelivr.net/gh/leonardosnt/mc-player-counter/dist/mc-player-counter.min.js"></script>
-			<script src="assets/js/cookie.js"></script>
-
-
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script src="assets/js/buttontop.js"></script>
 
 	</body>
 </html>
